@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table with 5 Columns</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Surveys</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Option 1</th>
+                <th>Option 2</th>
+                <th>Option 3</th>
+                <th>Option 4</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.question}}</td>
+                <td>{{ user.option1}}</td>
+                <td>{{ user.option2}}</td>
+                <td>{{ user.option3}}</td>
+                <td>{{ user.option4}}</td>
+                <td><a href="{% url 'survey_edit' user.id %}">edit</a></td>
+                <td><a href="{% url 'survey_delete' user.id %}">delete</a></td>
+            </tr>
+{% endfor %}
+           
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Sign up / Login Form</title>
+  <link rel="stylesheet" href="{% static 'login/style.css' %}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slide Navbar</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'login/slide navbar style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="main">  	
+        <input type="checkbox" id="chk" aria-hidden="true">
+
+            <div class="signup">
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="chk" aria-hidden="true">Login</label>
+					<input type="email" name="email" placeholder="Email" required="">
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" placeholder="Password" required>
+                        <span class="fa fa-eye toggle-password" onclick="togglePassword()" style="position: absolute; right: 70px; top: 50%; transform: translateY(-50%); cursor: pointer; color: black;"></span>
+                    </div>
+                    <button type="submit">Login</button>
+
+                </form>
+                {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+            </div>
+
+            <div class="login">
+                <form>
+                  
+                    <label for="chk" aria-hidden="true">Register</label>
+                    <!-- <input type="text" name="name" placeholder="name" required="">
+                    <input type="dropdown" name="gender" placeholder="gender" required=""> -->
+                    <div style="text-align: center;"></div>
+                        <a href="{% url 'register' %}" class="button fancy-button">User</a></
+                        <br>
+                        <a href="{% url 'buss_register' %}" class="button fancy-button">Business</a>
+                        <br>
+                        <style>
+                            a {
+                                display: inline-block;
+                                text-align: center;
+                                margin: 5px auto;
+                                font-size: 14px;
+                                padding: 8px 10px; /* Reduced padding to make the buttons smaller */
+                                text-align: center; /* Align text to the center */
+                            }
+                            a.button {
+                                display: block;
+                                margin: 10px auto; /* Center align the buttons */
+                                width: 150px; /* Added width to control the button size */
+                                border-radius: 20px; /* Adjusted border-radius for a smaller circular rectangle */
+                                padding: 5px 15px; /* Reduced padding for smaller buttons */
+                            }
+                            .fancy-button {
+                                display: inline-block;
+                                padding: 10px 20px;
+                                margin: 10px 0;
+                                font-size: 16px;
+                                font-weight: bold;
+                                text-decoration: none;
+                                color: #fff;
+                                background: linear-gradient(45deg, #6a11cb, #2c5499);
+                                border-radius: 25px;
+                                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                                transition: transform 0.2s, box-shadow 0.2s;
+                            }
+                            .fancy-button:hover {
+                                transform: translateY(-3px);
+                                box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+                            }
+                            .password-container {
+        position: relative;
+    }
+
+    .password-container input {
+        width: 51%; /* Reduced the width of the password box */
+        padding-right: 40px; /* Add space for the toggle icon */
+    }
+
+    .password-container .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #007bff;
+    }
+
+    .password-container .toggle-password:hover {
+        color: #0056b3;
+    }
+                        </style>
+                       
+                    </div>
+                    
+                </form>
+            </div>
+    </div>
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("password");
+            var toggleIcon = document.querySelector(".toggle-password");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
+    </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
