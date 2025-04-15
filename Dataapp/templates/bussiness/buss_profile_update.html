@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>User Profile Update</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f4f4f9;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+            .container {
+                background-color: #ffffff;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                width: 350px;
+                text-align: left;
+            }
+            h1 {
+                color: #333333;
+                font-size: 24px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            label {
+                font-size: 14px;
+                color: #555555;
+                margin-bottom: 5px;
+                display: block;
+            }
+            input[type="text"], input[type="password"], input[type="email"], select {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #cccccc;
+                border-radius: 5px;
+                font-size: 14px;
+                box-sizing: border-box;
+            }
+            button {
+                padding: 12px;
+                background-color: #007bff;
+                color: #ffffff;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+            button:hover {
+                background-color: #0056b3;
+            }
+            .form-group input:focus {
+                border-color: #007bff;
+                outline: none;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Update Profile</h1>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_question">Business Name:</label>
+                    {{ form.bussines_name }}
+                </div>
+                <div class="form-group">
+                    <label for="id_option1">Business Category:</label>
+                    {{ form.bussines_category }}
+                </div>
+                <div class="form-group">
+                    <label for="id_option2">Address:</label>
+                    {{ form.address }}
+                </div>
+                <div class="form-group">
+                    <label for="id_option3">District:</label>
+                    {{ form.district }}
+                </div>
+                <div class="form-group">
+                    <label for="id_option4">City:</label>
+                    {{ form.city }}
+                </div>
+                <div class="form-group">
+                    <label for="id_option4">Contact No:</label>
+                    {{ form.contact_no }}
+                </div>
+                <div class="form-group">
+                    <label for="id_option4">Email:</label>
+                    {{ form2.email }}
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </body>
+</html>

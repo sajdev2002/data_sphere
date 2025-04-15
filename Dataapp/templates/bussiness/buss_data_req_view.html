@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table with 5 Columns</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Data Request</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Number of rows</th>
+                <th>Cancel</th>
+                <th>Payment</th>
+                <th>View</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.data_category}}</td>
+                <td>{{ user.no_of_row}}</td>
+                {% if user.cancel_status == 0 %}
+                    <td><a href="{% url 'request_cancel' user.id %}">Cancel</a></td>
+                {% else %}
+                    <td>Cancelled</td>
+                {% endif %} 
+
+                {% if user.accept_status == 1 %}
+                    {% if user.payment_status    == 0 %}
+                    {% if user.cancel_status == 0 %}
+                        <td><a href="{% url 'payment_transfer' user.id %}" class="btn btn-success btn-sm">Payment</a></td>
+                        {% else %}
+                            <td>Cancelled</td>
+                        {% endif %}
+                    {% else %}
+                        <td>Paid</td>
+                    {% endif %}
+                {% else %}
+                    <td>Pending</td>
+                {% endif %}
+
+                {% if user.transfer_status == 1 %}
+                <td><a href="{% url 'buss_data_view' user.id %}" class="btn btn-success btn-sm">View</a></td>
+                {% else %}
+                    <td>processing</td>
+                {% endif %}
+            </tr>
+{% endfor %}
+           
+        </tbody>
+    </table>
+</body>
+</html>

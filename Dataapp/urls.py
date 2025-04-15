@@ -1,11 +1,13 @@
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns=[
-    path('',views.home,name='home'),
+    path('home',views.home,name='home'),
     path('user/',views.user,name='user'),
     path('buss/',views.buss,name='buss'),
-    path('login/',views.login,name='login'),
+    path('',views.login,name='login'),
     path('register/',views.register,name='register'),
     path('buss_register/',views.buss_register,name='buss_register'),
     path('datatable/',views.datatable,name='datatable'),
@@ -22,6 +24,48 @@ urlpatterns=[
     path('select_bussiness/',views.select_bussiness,name='select_bussiness'),
     path('select_bussiness_user/',views.select_bussiness_user,name='select_bussiness_user'),
     path('user_survey/<int:id>/',views.user_survey,name='user_survey'),
-    path('survey_complete/',views.survey_complete,name='survey_complete'),
-   
+    path('survey_complete',views.survey_complete,name='survey_complete'),
+    path('survey_view_buss/',views.survey_view_buss,name='survey_view_buss'),
+    path('upload_file/', views.upload_file, name='upload_file'),
+    path('admin_transaction_view',views.admin_transaction_view,name='admin_transaction_view'),
+    path('admin_trans_accept/<int:id>/',views.admin_trans_accept,name='admin_trans_accept'),
+    path('admin_trans_reject/<int:id>/',views.admin_trans_reject,name='admin_trans_reject'),
+    path('user_transaction_view',views.user_transaction_view,name='user_transaction_view'),
+    path('tran_del/<int:id>/',views.tran_del,name='tran_del'),
+    path('tran_edit/<int:id>/',views.tran_edit,name='tran_edit'),
+    path('payment_transfer/<int:id>/',views.payment_transfer,name='payment_transfer'),
+    path('review_product/',views.review_product,name='review_product'),
+    path('thank/',views.thank,name='thank'),
+    path('review_add/<int:id>/',views.review_add,name='review_add'),
+    path('user_review_view/',views.user_review_view,name='user_review_view'),
+    path('review_del/<int:id>/',views.review_del,name='review_del'),
+    path('review_edit/<int:id>/',views.review_edit,name='review_edit'),
+    path('survey_result_admin',views.survey_result_admin,name='survey_result_admin'),
+    path('admin_review_view',views.admin_review_view,name='admin_review_view'),
+    path('add_employee_details',views.add_employee_details,name='add_employee_details'),
+    path('employ_details_view/',views.employ_details_view,name='employ_details_view'),
+    path('emp_edit/<int:id>/',views.emp_edit,name='emp_edit'),
+    path('emp_del/<int:id>/',views.emp_del,name='emp_del'),
+    path('add_education_detail/',views.add_education_detail,name='add_education_detail'),
+    path('education_details_view/',views.education_details_view,name='education_details_view'),
+    path('edu_edit/<int:id>/',views.edu_edit,name='edu_edit'),
+    path('edu_del/<int:id>/',views.edu_del,name='edu_del'),
+    path('admin_rate_set/',views.admin_rate_set,name='admin_rate_set'),
+    path('admin_rate_view/',views.admin_rate_view,name='admin_rate_view'),
+    path('admin_rate_edit/<int:id>',views.admin_rate_edit,name='admin_rate_edit'),
+    path('bussiness_data_request/',views.bussiness_data_request,name='bussiness_data_request'),
+    path('buss_data_request_view/',views.buss_data_request_view,name='buss_data_request_view'),
+    path('request_cancel/<int:id>/',views.request_cancel,name='request_cancel'),
+    path('admin_request_view',views.admin_request_view,name='admin_request_view'),
+    path('admin_request_accept/<int:id>/',views.admin_request_accept,name='admin_request_accept'),
+    path('admin_data_tranfer/<int:id>/', views.admin_data_tranfer, name='admin_data_tranfer'),
+    path('buss_data_view/<int:id>/',views.buss_data_view,name='buss_data_view'), 
+    path('add_opennion/',views.add_opennion,name='add_opennion'), 
+    path('opinion_details_view/',views.opinion_details_view,name='opinion_details_view'), 
+    path('opinion_edit/<int:id>/',views.opinion_edit,name='opinion_edit'), 
+    path('opinion_del/<int:id>/',views.opinion_del,name='opinion_del'), 
+    # path('save_browser_history/', views.save_browser_history, name='save_browser_history'),
+    
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

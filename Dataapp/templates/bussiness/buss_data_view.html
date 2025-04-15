@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Data View</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ data_category }}</h1>
+    <table>
+        <thead>
+            <tr>
+                {% for field in fields %}
+                <th>{{ field }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% if data %}
+                {% for item in data %}
+                <tr>
+                    {% if data_category == 'Employee Details' %}
+                        <td>{{ item.login.uniq }}</td>
+                        <td>{{ item.department }}</td>
+                        <td>{{ item.designation }}</td>
+                        <td>{{ item.company_name }}</td>
+                        <td>{{ item.salary }}</td>
+                        <td>{{ item.location }}</td>
+                        <td>{{ item.date_of_joining }}</td>
+                        <td>{{ item.reason_to_leave_previous_company }}</td>
+                    {% elif data_category == 'Transaction Details' %}
+                    <td>{{ item.login.uniq }}</td>
+                        <td>{{ item.transaction_id }}</td>
+                        <td>{{ item.dateee }}</td>
+                        <td>{{ item.transaction_type }}</td>
+                        <td>{{ item.amount }}</td>
+                        <td>{{ item.payment_method }}</td>
+                        <td>{{ item.merchant_name }}</td>
+                        <td>{{ item.category }}</td>
+                    {% elif data_category == 'Education Details' %}
+                    <td>{{ item.login.uniq }}</td>
+                        <td>{{ item.degree_level }}</td>
+                        <td>{{ item.degree_name }}</td>
+                        <td>{{ item.institution }}</td>
+                        <td>{{ item.year_of_passing }}</td>
+                        <td>{{ item.grade_or_percentage }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="{{ fields|length }}">No data available</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</body>
+</html>

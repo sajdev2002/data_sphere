@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submit Your Product Opinion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f3f3;
+            margin: 0;
+            padding: 30px;
+        }
+        .form-container {
+            max-width: 600px;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 8px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .submit-btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .submit-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Product Opinion Form</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="id_product_type">Product Type <span style="color:red;">*</span></label>
+        {{ form.product_type }}
+
+        <label for="id_product_name">Product Name <span style="color:red;">*</span></label>
+        {{ form.product_name }}
+
+        <label for="id_about_product">About the Product <span style="color:red;">*</span></label>
+        {{ form.about_product }}
+
+        <label for="id_suggesions">Suggestions <span style="color:red;">*</span></label>
+        {{ form.suggesions }}
+
+        <label for="id_liked_features">Liked Features</label>
+        {{ form.liked_features }}
+
+        <label for="id_disliked_features">Disliked Features</label>
+        {{ form.disliked_features }}
+
+        <button type="submit" class="submit-btn">Submit Opinion</button>
+    </form>
+</div>
+
+</body>
+</html>

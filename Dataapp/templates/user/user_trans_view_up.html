@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #eceaed, #dde1dc);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #140a0a;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px 40px;
+            border-radius: 15px;
+            margin-top: 450px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 450px;
+            backdrop-filter: blur(10px);
+        }
+        h2 {
+            color: #191818;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        label {
+            font-size: 14px;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        input, select {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        button {
+            background: linear-gradient(135deg, #ff7eb3, #ff758c);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            transform: scale(1.05);
+        }
+        input:focus, select:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(230, 92, 92, 0.8);
+        }
+        .consent {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2>Transaction Details</h2>
+            
+            <label for="transaction_id">Transaction ID:</label>
+            {{ form.transaction_id }}
+            
+            <label for="date_time">Transaction Date:</label>
+            {{ form.dateee }}
+            
+            <label for="transaction_type">Transaction Type:</label>
+            {{ form.transaction_type }}
+            
+            <label for="amount">Amount:</label>
+            {{ form.amount }}
+            
+            <label for="payment_method">Payment Method:</label>
+            {{ form.payment_method }}
+            
+            <label for="merchant">Merchant/Receiver Name:</label>
+            {{ form.merchant_name }}
+            
+            <label for="category">Transaction Category:</label>
+            {{ form.category }}
+            
+            <label for="file">Upload File:</label>
+            {{ form.file }}
+            
+            <div class="checkbox-label">
+                <input type="checkbox" id="consent" name="consent" required>
+                <label for="consent">I agree to share my anonymized transaction data for analysis.</label>
+            </div>
+            
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html>

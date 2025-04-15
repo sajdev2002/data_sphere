@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #eceaed, #dde1dc);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #140a0a;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px 40px;
+            border-radius: 15px;
+            margin-top: 250px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 450px;
+            backdrop-filter: blur(10px);
+        }
+        h2 {
+            color: #111010;
+            margin-bottom: 0px;
+            font-size: 24px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        label {
+            font-size: 14px;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        input, select {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        button {
+            background: linear-gradient(135deg, #ff7eb3, #ff758c);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            transform: scale(1.05);
+        }
+        input:focus, select:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+        .consent {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2>Transaction Details</h2>
+            
+            <label for="transaction_id">Transaction ID:</label>
+            <input type="text" id="transaction_id" name="transaction_id" placeholder="TXN123456">
+            
+            <label for="date_time">Transaction Date:</label>
+            <input type="date" id="date_time" name="dateee" required>
+            
+            <label for="transaction_type">Transaction Type:</label>
+            <select id="transaction_type" name="transaction_type">
+                <option value="purchase">Purchase</option>
+                <option value="refund">Refund</option>
+                <option value="subscription">Subscription</option>
+                <option value="donation">Donation</option>
+            </select>
+            
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" step="100" required>
+            
+            <label for="payment_method">Payment Method:</label>
+            <select id="payment_method" name="payment_method">
+                <option value="credit_card">Credit Card</option>
+                <option value="debit_card">Debit Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="upi">UPI</option>
+                <option value="crypto">Cryptocurrency</option>
+            </select>
+            
+            <label for="merchant">Merchant/Receiver Name:</label>
+            <input type="text" id="merchant" name="merchant_name">
+            
+            <label for="category">Transaction Category:</label>
+            <select id="category" name="category">
+                <option value="gadget">Gadget</option>
+                <option value="vehicle">Vehicle</option>
+                <option value="shopping">Shopping</option>
+                <option value="travel">Travel</option>
+                <option value="food">Food</option>
+                <option value="entertainment">Entertainment</option>
+            </select>
+            
+            {{ form.file }}
+            
+            <div class="consent">
+                <input type="checkbox" id="consent" name="consent" required>
+                <label for="consent">I agree to share my anonymized transaction data for analysis.</label>
+            </div>
+            
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html>
