@@ -1026,7 +1026,7 @@
 									<th>Category</th>
                   <th>No.of rows</th>
                   <th>Status</th>
-                  <th>Transfer</th>
+                 
                 
 									
 									</tr>
@@ -1046,17 +1046,9 @@
                                         <td><span >Cancelled</span></td>
                                         {% endif %}
                                       
-                                        {% if user.payment_status == 1 %}
-                                            {% if user.transfer_status == 0 %}
-                                            <td><a href="{% url 'admin_data_tranfer' user.id %}" class="btn btn-primary btn-sm">Transfer</a></td>
-                                            {% else %}
-                                            <td><span >Transfered</span></td>
-                                            {% endif %}
                                         
-                                        {% else %}
-                                        <td><span >Pending</span></td>
-                                        {% endif %} 
-                                            
+                                        
+                                       
                                         
                                         
                                     </tr>

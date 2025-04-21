@@ -137,22 +137,30 @@ class data_rate_form(forms.ModelForm):
             'amount': 'Amount (in USD)',
         }
         
+
 class buss_data_request_form(forms.ModelForm):
-    data_category = forms.ChoiceField(choices=[]) 
+    data_category = forms.ChoiceField(choices=[])
+
+    class Meta:
+        model = buss_data_request
+        fields = ['data_category', 'table_column', 'table_value', 'no_of_row']
+        widgets = {
+            'data_category': forms.Select(attrs={'class': 'form-control', 'style': 'width: 50%;'}),
+            'no_of_row': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'style': 'width: 95%;'}),
+            'table_value': forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 50%;'}),
+            'table_column': forms.Select(attrs={'class': 'form-control', 'style': 'width: 50%;'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['data_category'].choices = [
             (rate.data_category, rate.data_category) for rate in data_rate.objects.all()
         ]
-
-    class Meta:
-        model = buss_data_request
-        fields = ['data_category', 'no_of_row']
-        widgets = {
-            'data_category': forms.Select(attrs={'class': 'form-control'}),
-            'no_of_row': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
-        }
+        if 'table_column' in self.data:
+            selected_column = self.data.get('table_column')
+            self.fields['table_column'].choices = [(selected_column, selected_column)]
+        else:
+            self.fields['table_column'].choices = []
 
 
 class ProductOpinionForm(forms.ModelForm):
@@ -173,4 +181,12 @@ class ProductOpinionForm(forms.ModelForm):
             'suggesions': forms.Textarea(attrs={'rows': 3}),
             'liked_features': forms.Textarea(attrs={'rows': 2}),
             'disliked_features': forms.Textarea(attrs={'rows': 2}),
+        }
+
+class chatmodelform(forms.ModelForm):
+    class Meta:
+        model = chatmodel
+        fields = ['message']
+        widgets = {
+            'message': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Type your message here...'}),
         }

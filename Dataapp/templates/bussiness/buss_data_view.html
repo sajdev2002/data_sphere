@@ -58,6 +58,31 @@
                         <td>{{ item.institution }}</td>
                         <td>{{ item.year_of_passing }}</td>
                         <td>{{ item.grade_or_percentage }}</td>
+                    {% elif data_category == 'Product Review' %}
+                    <td>{{ item.login.uniq }}</td>
+                    <td>{{ item.product_name }}</td>
+                        <td>{{ item.model_number }}</td>
+                        <td>{{ item.rating }}</td>
+                        <td>{{ item.positive_feedback }}</td>
+                        <td>{{ item.negative_feedback }}</td>
+                        <td>{{ item.suggestions }}</td>
+                    {% elif data_category == 'User Data' %}
+                         <td>{{ item.login.uniq }}</td>
+                         <td>{{ item.name}}</td>
+                    <td>{{ item.gender}}</td>
+                    <td>{{ item.dob}}</td>
+                    <td>{{ item.state}}</td>
+                    <td>{{ item.city}}</td>
+                    <td>{{ item.country}}</td>
+                    <td>{{ item.login.email}}</td>
+                    {% elif data_category == 'Openion' %}
+                    <td>{{ item.login.uniq }}</td>
+                    td>{{ user.product_type}}</td>
+                        <td>{{ user.product_name}}</td>
+                        <td>{{ user.about_product}}</td>
+                        <td>{{ user.suggesions}}</td>
+                        <td>{{ user.liked_features}}</td>
+                        <td>{{ user.disliked_features}}</td>
                     {% endif %}
                 </tr>
                 {% endfor %}

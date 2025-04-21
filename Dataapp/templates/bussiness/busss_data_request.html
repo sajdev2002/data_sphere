@@ -1,13 +1,15 @@
+
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Data Request Form</title>
+    <title>Data Request</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
             margin: 0;
             padding: 0;
             display: flex;
@@ -15,60 +17,227 @@
             align-items: center;
             height: 100vh;
         }
-        .form-container {
-            background-color: #ffffff;
+
+        form {
+            background: #ffffff;
             padding: 20px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
         }
+
         h1 {
             text-align: center;
             color: #333333;
+            margin-bottom: 20px;
         }
+
         label {
-            display: block;
-            margin-bottom: 8px;
             font-weight: bold;
             color: #555555;
+            display: block;
+            margin-bottom: 8px;
         }
-        select, input[type="number"], button {
+
+        select, input, button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 15px;
             border: 1px solid #cccccc;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
         }
+
         button {
-            background-color: #007bff;
+            background: linear-gradient(135deg, #007bff, #0056b3);
             color: #ffffff;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s, background 0.3s ease;
         }
+
         button:hover {
-            background-color: #0056b3;
+            background: linear-gradient(135deg, #0056b3, #003f7f);
+            transform: scale(1.05);
         }
+
+        .filter-toggle {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .filter-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .filter-toggle i {
+            margin-right: 8px;
+        }
+
+        .filter-section {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <h1>Business Data Request Form</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div>
-                <label for="id_data_category">Data Category:</label>
-                {{ form.data_category }}
-            </div>
-            <div>
-                <label for="id_no_of_row">Number of Rows:</label>
-                <!-- {{ form.no_of_row }} -->
-                <input type="number" name="no_of_row" id="id_no_of_row" step="1" required style="width: 95%;">
-            </div>
-            <button type="submit">Submit</button>
-        </form>
+
+<form method="post">
+    {% csrf_token %}
+    <h1>Data Request Form</h1>
+    <div>
+        {{ form.data_category.label_tag }}
+        {{ form.data_category }}
     </div>
+
+    
+
+    <!-- FILTER TOGGLE ICON -->
+    <div class="filter-toggle" id="filterToggle">
+        <i class="fas fa-filter"></i> Add Filters (optional)
+    </div>
+
+    <!-- HIDDEN FILTER SECTION -->
+    <div id="filterSection" class="filter-section">
+        <div>
+            <label for="id_table_column">Table Column</label>
+            <select name="table_column" id="id_table_column" class="form-control">
+                <option value="">Select a column</option>
+            </select>
+        </div>
+        
+        <div id="id_table_value_container">
+    <label for="id_table_value">Table Value</label>
+    <input type="text" name="table_value" class="form-control" id="id_table_value" />
+</div>
+    </div>
+    <div>
+        {{ form.no_of_row.label_tag }}
+        {{ form.no_of_row }}
+    </div>
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        // Toggle filter section
+        $('.filter-toggle').click(function () {
+            $('#filterSection').slideToggle();
+        });
+    
+        function loadColumns(category) {
+            $.ajax({
+                url: "{% url 'get_category_columns' %}",
+                data: { 'category': category },
+                dataType: 'json',
+                success: function (response) {
+                    let columnDropdown = $('#id_table_column');
+                    columnDropdown.empty();
+                    columnDropdown.append('<option value="">Select a column</option>');
+                    response.columns.forEach(function (column) {
+                        columnDropdown.append('<option value="' + column + '">' + column + '</option>');
+                    });
+    
+                    // Reset table_value input
+                    $('#id_table_value_container').html(`
+                        <label for="id_table_value">Table Value</label>
+                        <input type="text" name="table_value" class="form-control" id="id_table_value" />
+                    `);
+                }
+            });
+        }
+        function loadAvailableRowCount(category) {
+            const selectedColumn = $('#id_table_column').val();
+            const selectedValue = $('#id_table_value').val();
+    
+            $.ajax({
+                url: "{% url 'get_available_row_count' %}",
+                data: {
+                    'category': category,
+                    'column': selectedColumn,
+                    'value': selectedValue
+                },
+                dataType: 'json',
+                success: function (response) {
+                    $('#id_no_of_row').val(response.count);
+                }
+            });
+        }
+    
+        function initCategory(category) {
+            loadColumns(category);
+            loadAvailableRowCount(category);
+        }
+    
+        // On page load
+        const defaultCategory = $('#id_data_category').val();
+        if (defaultCategory) {
+            initCategory(defaultCategory);
+        }
+    
+        // On category change
+        $('#id_data_category').change(function () {
+            const selectedCategory = $(this).val();
+            initCategory(selectedCategory);
+        });
+    
+        // On column change -> fetch dropdown choices if applicable
+        $('#id_table_column').change(function () {
+            const selectedColumn = $(this).val();
+            $.ajax({
+                url: "{% url 'get_column_choices' %}",
+                data: { 'column': selectedColumn },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.choices.length > 0) {
+                        let selectHtml = '<label for="id_table_value">Table Value</label><select name="table_value" class="form-control" id="id_table_value">';
+                        selectHtml += '<option value="">Select value</option>';
+                        response.choices.forEach(function (choice) {
+                            selectHtml += `<option value="${choice[0]}">${choice[1]}</option>`;
+                        });
+                        selectHtml += '</select>';
+                        $('#id_table_value_container').html(selectHtml);
+                    } else {
+                        $('#id_table_value_container').html(`
+                            <label for="id_table_value">Table Value</label>
+                            <input type="text" name="table_value" class="form-control" id="id_table_value" />
+                        `);
+                    }
+    
+                    // After dropdown loads, bind event again
+                    $('#id_table_value').off().on('change keyup', function () {
+                        const cat = $('#id_data_category').val();
+                        if (cat) loadAvailableRowCount(cat);
+                    });
+                }
+            });
+        });
+    
+        // Trigger row count when user types or selects value
+        $(document).on('change keyup', '#id_table_column, #id_table_value', function () {
+            const cat = $('#id_data_category').val();
+            if (cat) loadAvailableRowCount(cat);
+        });
+    });
+    </script>
+    
+
+
+    
+
 </body>
-</html></form>
+</html>

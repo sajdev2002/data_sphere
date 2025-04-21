@@ -60,10 +60,10 @@
 
           <li class="dropdown"><a href="#"><span>Data Entry</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="../upload_file/">Transaction Details</a></li>
+              <li><a href="../upload_file/">Transaction </a></li>
               <li><a href="../review_product/">Review</a></li>
-              <li><a href="../add_employee_details">Employee Details</a></li>
-              <li><a href="../add_education_detail/">Education Details</a></li>
+              <li><a href="../add_employee_details">Employee </a></li>
+              <li><a href="../add_education_detail/">Education </a></li>
               <li><a href="../add_opennion/">Opinion</a></li>
               <li><a href="../save_browser_history/">Browser history</a></li>
             </ul>
@@ -96,6 +96,14 @@
               <li><a href="#">Dropdown 4</a></li>
             </ul>
           </li>
+            <li>
+            <a href="/user_wallet_view/">
+              <span class="wallet-widget">
+              <i class="bi bi-wallet2"></i> ₹<span class="wallet-balance">{{ user_wallet.balance|floatformat:2 }}</span>
+              </span>
+            </a>
+            </li>
+          </li> 
           <li><a href="../update_user">Profile</a></li>
           
         </ul>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .chat {
+        margin: auto;
+    }
+
+    .card {
+        height: 500px;
+        border-radius: 15px !important;
+        background-color: rgba(0,0,0,0.4) !important;
+    }
+
+    .card-header, .card-footer {
+        border: none;
+    }
+
+    .card-header {
+        border-radius: 15px 15px 0 0;
+    }
+
+    .card-footer {
+        border-radius: 0 0 15px 15px;
+    }
+
+    .msg_card_body {
+        overflow-y: auto;
+    }
+
+    .type_msg {
+        background: rgba(255,255,255,0.9);
+        height: 50px;
+        border: none;
+        resize: none;
+        border-radius: 30px;
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .type_msg:focus {
+        box-shadow: 0 0 10px rgba(0, 132, 255, 0.3);
+        outline: none;
+    }
+
+    .attach_btn, .send_btn {
+        background-color: transparent;
+        color: white;
+        cursor: pointer;
+        border: none;
+    }
+
+    .user_img {
+        height: 70px;
+        width: 70px;
+        border-radius: 50%;
+        border: 1.5px solid #f5f6fa;
+    }
+
+    .online_icon {
+        position: absolute;
+        height: 15px;
+        width: 15px;
+        background-color: #4cd137;
+        border-radius: 50%;
+        bottom: 0.2em;
+        right: 0.4em;
+        border: 1.5px solid white;
+    }
+
+    .user_info span {
+        font-size: 20px;
+        color: white;
+    }
+
+    .msg_cotainer, .msg_cotainer_send {
+        padding: 10px 15px;
+        border-radius: 20px;
+        max-width: 70%;
+        font-size: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        animation: fadeIn 0.3s ease-in;
+    }
+
+    .msg_cotainer {
+        background-color: #f1f0f0;
+        color: #333;
+        margin-left: 10px;
+    }
+
+    .msg_cotainer_send {
+        background-color: #dcf8c6;
+        color: #000;
+        margin-left: auto;
+        margin-right: 10px;
+    }
+
+    .msg_time, .msg_time_send {
+        font-size: 11px;
+        color: #555;
+        display: block;
+        text-align: right;
+        margin-top: 6px;
+        padding-right: 5px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .input-group-text {
+        background-color: transparent;
+        border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid h-100">
+    <div class="row justify-content-center h-100">
+      <div class="col-md-8 col-xl-6 chat">
+        <div class="card">
+          <div class="card-header msg_head">
+            <div class="d-flex bd-highlight">
+              <div class="img_cont">
+                <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="user_img">
+                <span class="online_icon"></span>
+              </div>
+              <div class="user_info ml-3">
+                <span>Chat with Admin</span>
+                <p>Messages</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body msg_card_body">
+            {% for msg in messages %}
+                {% if msg.sender == 'You' %}
+                    <div class="d-flex justify-content-end mb-4">
+                        <div class="msg_cotainer_send">
+                            <div class="message_text">{{ msg.message }}</div>
+                            <div class="msg_time_send">
+                                {{ msg.timestamp }}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="d-flex justify-content-start mb-4">
+                        <div class="msg_cotainer">
+                            <div class="message_text">{{ msg.message }}</div>
+                            <div class="msg_time">
+                                {{ msg.timestamp }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+          <div class="card-footer">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+              </div>
+              <textarea id="message_input" class="form-control type_msg" placeholder="Type your message..." style="border-radius: 50px; height: 40px; overflow: hidden;"></textarea>
+              <div class="input-group-append">
+                <span class="input-group-text send_btn" id="send_btn"><i class="fas fa-location-arrow"></i></span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      // Scroll to bottom on page load
+      $('.msg_card_body').scrollTop($('.msg_card_body')[0].scrollHeight);
+
+      $('#send_btn').on('click', function() {
+        let message = $('#message_input').val().trim();
+        if (!message) return;
+
+        $.ajax({
+          url: "{% url 'send_message' %}",
+          method: 'POST',
+          data: {
+            'message': message,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          },
+          success: function(response) {
+            if (response.message) {
+              const newMsg = `
+                <div class="d-flex justify-content-end mb-4">
+                  <div class="msg_cotainer_send">
+                    <div class="message_text">${response.message}</div>
+                    <div class="msg_time_send">${response.timestamp}</div>
+                  </div>
+                </div>`;
+              $('.msg_card_body').append(newMsg);
+              $('#message_input').val('');
+              $('.msg_card_body').animate({ scrollTop: $('.msg_card_body')[0].scrollHeight }, 500);
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

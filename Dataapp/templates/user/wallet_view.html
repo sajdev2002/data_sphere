@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Wallet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        h1, h2, h3 {
+            margin: 20px 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .no-earnings {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Wallet</h1>
+    </header>
+    <div class="container">
+        <h2>Welcome, {{ user_wallet.user.name }}!</h2>
+        <h3>Wallet Balance: ₹{{ user_wallet.balance }}</h3>
+
+        <h3>Category-wise Earnings</h3>
+        <table>
+            <tr>
+                <th>Data Category</th>
+                <th>Amount Earned (₹)</th>
+            </tr>
+            {% for category, amount in category_earnings.items %}
+            <tr>
+                <td>{{ category }}</td>
+                <td>{{ amount }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2" class="no-earnings">No earnings yet.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

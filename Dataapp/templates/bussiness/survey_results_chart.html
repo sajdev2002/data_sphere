@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Survey Results</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        .chart-buttons {
+            margin: 20px 0;
+        }
+        .chart-buttons a {
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 8px;
+            margin: 0 5px;
+            transition: 0.3s ease;
+        }
+        .chart-buttons a:hover {
+            background-color: #2980b9;
+        }
+        img {
+            max-width: 90%;
+            height: auto;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ survey.question }}</h2>
+
+    <div class="chart-buttons">
+        <a href="?chart=bar">Bar Chart</a>
+        <a href="?chart=pie">Pie Chart</a>
+        <a href="?chart=line">Line Chart</a>
+        
+    </div>
+
+    <img src="{{ chart_url }}" alt="Survey Chart">
+</body>
+</html>

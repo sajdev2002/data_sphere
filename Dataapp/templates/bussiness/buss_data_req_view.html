@@ -1,71 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Table with 5 Columns</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-    </style>
-</head>
-<body>
-    <h1>Data Request</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Number of rows</th>
-                <th>Cancel</th>
-                <th>Payment</th>
-                <th>View</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-            <tr>
-                <td>{{ user.data_category}}</td>
-                <td>{{ user.no_of_row}}</td>
-                {% if user.cancel_status == 0 %}
-                    <td><a href="{% url 'request_cancel' user.id %}">Cancel</a></td>
-                {% else %}
-                    <td>Cancelled</td>
-                {% endif %} 
+{% load static %}
 
-                {% if user.accept_status == 1 %}
-                    {% if user.payment_status    == 0 %}
-                    {% if user.cancel_status == 0 %}
-                        <td><a href="{% url 'payment_transfer' user.id %}" class="btn btn-success btn-sm">Payment</a></td>
-                        {% else %}
-                            <td>Cancelled</td>
-                        {% endif %}
-                    {% else %}
-                        <td>Paid</td>
-                    {% endif %}
-                {% else %}
-                    <td>Pending</td>
-                {% endif %}
 
-                {% if user.transfer_status == 1 %}
-                <td><a href="{% url 'buss_data_view' user.id %}" class="btn btn-success btn-sm">View</a></td>
+
+<div class="card-container" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center; padding: 20px; min-height: 100vh; text-align: center;">
+    {% for user in users|dictsortreversed:"current_date" %}
+    {% if user.cancel_status == 0 %}
+    <div class="card" style="width: 300px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; background-color: #fff; transition: transform 0.3s;">
+        <h3 style="font-size: 1.5em; color: #333; margin-bottom: 10px;">{{ user.data_category }}</h3>
+        <p style="margin: 5px 0; text-align: left;"><strong>Date:</strong> {{ user.current_date }}</p>
+        <p style="margin: 5px 0; text-align: left;"><strong>Rows:</strong> {{ user.no_of_row }}</p>
+        <p style="margin: 5px 0; text-align: left;"><strong>Column:</strong> {{ user.table_column }}</p>
+        <p style="margin: 5px 0; text-align: left;"><strong>Value:</strong> {{ user.table_value }}</p>
+        <p style="margin: 10px 0;">
+            {% if user.payment_status == 0 %}
+                <a href="{% url 'request_cancel' user.id %}" style="display: inline-block; padding: 10px 20px; background-color: #e74c3c; color: #fff; text-decoration: none; font-weight: bold; border-radius: 5px;">Cancel</a>
+            {% endif %}
+        </p>
+        <p style="margin: 10px 0;">
+            {% if user.accept_status == 1 %}
+                {% if user.payment_status == 0 %}
+                    <a href="{% url 'payment_transfer' user.id %}" style="display: inline-block; padding: 10px 20px; background-color: #27ae60; color: #fff; text-decoration: none; font-weight: bold; border-radius: 5px;">Payment</a>
                 {% else %}
-                    <td>processing</td>
+                    <span style="color: #2ecc71;"></span>
                 {% endif %}
-            </tr>
-{% endfor %}
-           
-        </tbody>
-    </table>
-</body>
-</html>
+            {% else %}
+                <span style="color: #f39c12;">Pending</span>
+            {% endif %}
+        </p>
+        <p style="margin: 10px 0;">
+            {% if user.payment_status == 1 %}
+                <a href="{% url 'buss_data_view' user.id %}" style="display: inline-block; padding: 10px 20px; background-color: #3498db; color: #fff; text-decoration: none; font-weight: bold; border-radius: 5px;">View</a>
+            {% else %}
+                <span style="color: #999;"></span>
+            {% endif %}
+        </p>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>

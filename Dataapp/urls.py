@@ -58,14 +58,29 @@ urlpatterns=[
     path('request_cancel/<int:id>/',views.request_cancel,name='request_cancel'),
     path('admin_request_view',views.admin_request_view,name='admin_request_view'),
     path('admin_request_accept/<int:id>/',views.admin_request_accept,name='admin_request_accept'),
-    path('admin_data_tranfer/<int:id>/', views.admin_data_tranfer, name='admin_data_tranfer'),
     path('buss_data_view/<int:id>/',views.buss_data_view,name='buss_data_view'), 
     path('add_opennion/',views.add_opennion,name='add_opennion'), 
     path('opinion_details_view/',views.opinion_details_view,name='opinion_details_view'), 
     path('opinion_edit/<int:id>/',views.opinion_edit,name='opinion_edit'), 
-    path('opinion_del/<int:id>/',views.opinion_del,name='opinion_del'), 
+    path('opinion_del/<int:id>/',views.opinion_del,name='opinion_del'),
+    path('admin_employee_view',views.admin_employee_view,name='admin_employee_view'), 
+    path('admin_edu_view',views.admin_edu_view,name='admin_edu_view'), 
+    path('admin_opinion_view',views.admin_opinion_view,name='admin_opinion_view'), 
+    path('buss_trans_preview',views.buss_trans_preview,name='buss_trans_preview'), 
+    path('buss_review_preview',views.buss_review_preview,name='buss_review_preview'), 
+    path('survey_view_chart',views.survey_view_chart,name='survey_view_chart'), 
+    path('survey_results/<int:id>/',views.survey_results,name='survey_results'), 
+    path('user_wallet_view/', views.user_wallet_view, name='user_wallet_view'),
+    path('get-category-columns/', views.get_category_columns, name='get_category_columns'),
+    path('get-column-choices/', views.get_column_choices, name='get_column_choices'),
+    path('get_available_row_count/', views.get_available_row_count, name='get_available_row_count'),
+    path('chat/', views.chat, name='chat'),
+    path('send-message/', views.send_message, name='send_message'),
+    path('admin_chat_buss/', views.admin_chat_buss, name='admin_chat_buss'),
+
     # path('save_browser_history/', views.save_browser_history, name='save_browser_history'),
     
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
