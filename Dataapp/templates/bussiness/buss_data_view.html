@@ -1,3 +1,7 @@
+{% extends "bussiness/header.html" %}
+{% load static %}
+{% block content %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,23 +9,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Data View</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #4CAF50;
+        }
         table {
-            width: 100%;
+            width: 90%;
+            margin: 20px auto;
             border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px 15px;
             text-align: left;
+            border: 1px solid #ddd;
         }
         th {
+            background-color: #202046;
+            color: white;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        tr:nth-child(even) {
             background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        td {
+            font-size: 14px;
+        }
+        .no-data {
+            text-align: center;
+            font-size: 16px;
+            color: #888;
+        }
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+            th, td {
+                font-size: 12px;
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <br><br>
     <h1>{{ data_category }}</h1>
-    <table>
+    <table >
         <thead>
             <tr>
                 {% for field in fields %}
@@ -43,7 +90,7 @@
                         <td>{{ item.date_of_joining }}</td>
                         <td>{{ item.reason_to_leave_previous_company }}</td>
                     {% elif data_category == 'Transaction Details' %}
-                    <td>{{ item.login.uniq }}</td>
+                        <td>{{ item.login.uniq }}</td>
                         <td>{{ item.transaction_id }}</td>
                         <td>{{ item.dateee }}</td>
                         <td>{{ item.transaction_type }}</td>
@@ -52,46 +99,48 @@
                         <td>{{ item.merchant_name }}</td>
                         <td>{{ item.category }}</td>
                     {% elif data_category == 'Education Details' %}
-                    <td>{{ item.login.uniq }}</td>
+                        <td>{{ item.login.uniq }}</td>
                         <td>{{ item.degree_level }}</td>
                         <td>{{ item.degree_name }}</td>
                         <td>{{ item.institution }}</td>
                         <td>{{ item.year_of_passing }}</td>
                         <td>{{ item.grade_or_percentage }}</td>
                     {% elif data_category == 'Product Review' %}
-                    <td>{{ item.login.uniq }}</td>
-                    <td>{{ item.product_name }}</td>
+                        <td>{{ item.login.uniq }}</td>
+                        <td>{{ item.product_name }}</td>
                         <td>{{ item.model_number }}</td>
                         <td>{{ item.rating }}</td>
                         <td>{{ item.positive_feedback }}</td>
                         <td>{{ item.negative_feedback }}</td>
                         <td>{{ item.suggestions }}</td>
                     {% elif data_category == 'User Data' %}
-                         <td>{{ item.login.uniq }}</td>
-                         <td>{{ item.name}}</td>
-                    <td>{{ item.gender}}</td>
-                    <td>{{ item.dob}}</td>
-                    <td>{{ item.state}}</td>
-                    <td>{{ item.city}}</td>
-                    <td>{{ item.country}}</td>
-                    <td>{{ item.login.email}}</td>
+                        <td>{{ item.login.uniq }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.gender }}</td>
+                        <td>{{ item.dob }}</td>
+                        <td>{{ item.state }}</td>
+                        <td>{{ item.city }}</td>
+                        <td>{{ item.country }}</td>
+                        <td>{{ item.login.email }}</td>
                     {% elif data_category == 'Openion' %}
-                    <td>{{ item.login.uniq }}</td>
-                    td>{{ user.product_type}}</td>
-                        <td>{{ user.product_name}}</td>
-                        <td>{{ user.about_product}}</td>
-                        <td>{{ user.suggesions}}</td>
-                        <td>{{ user.liked_features}}</td>
-                        <td>{{ user.disliked_features}}</td>
+                        <td>{{ item.login.uniq }}</td>
+                        <td>{{ user.product_type }}</td>
+                        <td>{{ user.product_name }}</td>
+                        <td>{{ user.about_product }}</td>
+                        <td>{{ user.suggesions }}</td>
+                        <td>{{ user.liked_features }}</td>
+                        <td>{{ user.disliked_features }}</td>
                     {% endif %}
                 </tr>
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="{{ fields|length }}">No data available</td>
+                    <td class="no-data" colspan="{{ fields|length }}">No data available</td>
                 </tr>
             {% endif %}
         </tbody>
     </table>
 </body>
 </html>
+<br><br>
+{% endblock %}

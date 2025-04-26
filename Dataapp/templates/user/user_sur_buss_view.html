@@ -1,3 +1,6 @@
+{% extends "user/user_header.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,15 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Business View</title>
     <style>
-        body {
+        /* Scoped styles for the business view page */
+        .business-view-page {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
             background-color: #f8f9fa;
             color: #343a40;
+            padding: 20px 0;
         }
 
-        header {
+        .business-view-page header {
             background-color: #17599f;
             color: white;
             padding: 20px;
@@ -21,46 +24,56 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        header h1 {
+        .business-view-page header h1 {
             margin: 0;
             font-size: 2rem;
         }
 
-        main {
+        .business-view-page main {
             padding: 20px;
         }
 
-        table {
+        .table-container {
+            max-width: 600px; /* Limit the width of the table */
+            margin: 20px auto; /* Center the table container */
+            background-color: white;
+            border-radius: 12px; /* Rounded edges */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 15px; /* Add padding around the table */
+        }
+
+        .business-view-page table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
+            border-radius: 12px;
         }
 
-        table th, table td {
+        .business-view-page table th, .business-view-page table td {
             padding: 12px 15px;
             text-align: left;
+            border-radius: 12px;
         }
 
-        table th {
+        .business-view-page table th {
             background-color: #17589e;
             color: white;
             font-weight: bold;
+            border-radius: 12px;
         }
 
-        table tr:nth-child(even) {
+        .business-view-page table tr:nth-child(even) {
             background-color: #f2f2f2;
+            border-radius: 12px;
         }
 
-        table tr:hover {
+        .business-view-page table tr:hover {
             background-color: #e9ecef;
             cursor: pointer;
+            border-radius: 12px;
         }
 
-        table td a {
+        .business-view-page table td a {
             color: #4725cb;
             font-weight: bold;
             text-decoration: none;
@@ -70,12 +83,13 @@
             transition: all 0.3s ease;
         }
 
-        table td a:hover {
+        .business-view-page table td a:hover {
             background-color: #007bff;
             color: white;
+            border-radius: 12px;
         }
 
-        footer {
+        .business-view-page footer {
             text-align: center;
             padding: 10px;
             background-color: #343a40;
@@ -86,30 +100,31 @@
         }
     </style>
 </head>
-<body>
+<body class="business-view-page">
     <header>
-        <h1>Business</h1>
+        <br><br>
+        <h1 style="text-align: center;">Business</h1>
     </header>
     <main>
-        <table id="example2" class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>Company Name</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in buss %}
-                <tr>
-                    <td>{{ user.bussines_name }}</td>
-                    <td><a href="{% url 'user_survey' user.login_id %}">View</a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table id="example2" class="table ">
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in buss %}
+                    <tr>
+                        <td>{{ user.bussines_name }}</td>
+                        <td><a href="{% url 'user_survey' user.login_id %}">View</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </main>
-    <footer>
-        &copy; 2023 Your Company. All rights reserved.
-    </footer>
 </body>
 </html>
+{% endblock %}

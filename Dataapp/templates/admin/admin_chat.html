@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Chat</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        body, html {
+            height: 100%;
+            background: linear-gradient(to right, #53add6, #4c7cd6, #7F7FD5);
+            margin: 0;
+        }
+        .card {
+            height: 75vh;
+            border-radius: 25px;
+            background-color: rgba(12, 11, 11, 0.515);
+            color: rgb(226, 217, 217);
+            margin-top: 100px;
+        }
+        .card-body.msg_card_body
+        {
+            color: rgb(9, 5, 5);
+
+        }
+        .col-md-4.col-xl-3 {
+    border-radius: 25px;
+}
+.col-md-4.col-md-4.col-xl-3 {
+    border-radius: 25px;
+}
+        .contacts_body {
+            overflow-y: auto;
+            height: 75vh;
+            border-radius: 25px;
+
+        }
+        .card-header
+        {
+            background-color: rgba(12, 11, 11, 0.69);
+        }
+        .msg_card_body {
+    overflow-y: scroll; /* Keeps the content scrollable */
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.msg_card_body::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+}
+        .msg_cotainer, .msg_cotainer_send {
+            padding: 10px;
+            border-radius: 15px;
+            margin-bottom: 5px;
+            max-width: 60%;
+            position: relative;
+        }
+        .msg_cotainer {
+            background-color: #82ccdd;
+            align-self: flex-start;
+        }
+        .msg_cotainer_send {
+            background-color: #78e08f;
+            align-self: flex-end;
+        }
+        .msg_time, .msg_time_send {
+            font-size: 10px;
+            color: rgba(36, 31, 31, 0.6);
+        }
+        textarea.form-control {
+    border-radius: 30px !important;
+    padding: 10px 20px;
+    resize: none;
+    height: 45px;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    color: #000;
+}
+
+textarea.form-control::placeholder {
+    color: #999;
+}
+
+#send_btn {
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    padding: 0;
+    background-color: #343a40;
+    border: none;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+}
+
+#send_btn:hover {
+    background-color: #212529;
+    transform: scale(1.1);
+}
+.col-md-4.col-md-4.col-xl-3{
+    border-radius: 25px;
+
+}
+
+
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <!-- Sidebar: Business List -->
+        <div class="col-md-4 col-xl-3">
+            <div class="card">
+                <div class="card-header"><h5>Businesses</h5></div>
+                <div class="card-body contacts_body" style="color: black;">
+                    <ul class="list-unstyled">
+                        {% for b in businesses %}
+                            <li class="mb-2">
+                                <a href="?business_id={{ b.id }}" class="text-white d-block p-2 rounded"
+                                   style="background-color: rgba(33, 31, 31, 0.507); text-decoration: none;">
+                                    <strong style="color: rgb(226, 218, 218);">{{ b.bussines_name }}</strong><br>
+                                    <small style="color: rgb(231, 219, 219);">{{ b.bussines_category }}</small>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat -->
+        <div class="col-md-8 col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    {% if selected_business %}
+                        Chat with <strong>{{ selected_business.bussines_name }}</strong>
+                    {% else %}
+                        Select a business to start chat
+                    {% endif %}
+                </div>
+
+                <div class="card-body msg_card_body" id="chat-box">
+                    {% for msg in messages %}
+                        {% if msg.sender == admin_id %}
+                            <div class="d-flex justify-content-end">
+                                <div class="msg_cotainer_send">{{ msg.message }}
+                                    <div class="msg_time_send">{{ msg.timestamp|date:"M d, h:i A" }}</div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="d-flex justify-content-start">
+                                <div class="msg_cotainer">{{ msg.message }}
+                                    <div class="msg_time">{{ msg.timestamp|date:"M d, h:i A" }}</div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% if selected_business %}
+                <div class="card-footer bg-transparent border-top-0">
+                    <div class="d-flex align-items-center">
+                        <textarea id="message_input" class="form-control" placeholder="Type your message..."></textarea>
+                        <button class="ml-2" id="send_btn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+                
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        // Scroll to bottom on page load
+        $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+
+        $('#send_btn').click(function(){
+            let message = $('#message_input').val().trim();
+            if (message.length === 0) return;
+
+            $.ajax({
+                url: "{% url 'send_message' %}",
+                method: "POST",
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                data: JSON.stringify({
+                    sender: "{{ admin_id }}",
+                    receiver: "{{ selected_business.login.id|default:'0'|escapejs }}",
+                    message: message
+                }),
+                success: function(response){
+                    let html = `
+                    <div class="d-flex justify-content-end">
+                        <div class="msg_cotainer_send">${response.message}
+                            <div class="msg_time_send">${response.timestamp}</div>
+                        </div>
+                    </div>`;
+                    $('#chat-box').append(html);
+                    $('#message_input').val('');
+
+                    // Scroll to bottom after new message
+                    $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

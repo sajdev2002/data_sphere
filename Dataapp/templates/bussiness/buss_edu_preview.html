@@ -1,7 +1,6 @@
-{% extends "user/user_header.html" %}
+{% extends "bussiness/header.html" %}
 {% load static %}
 {% block content %}
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +9,14 @@
     <title>Education Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        header a {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Use the inherited color */
+}
+
+header a:hover {
+    text-decoration: none; /* Prevent underline on hover */
+}
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -106,21 +113,14 @@
             background-color: #c82333;
         }
 
-        header a {
-            text-decoration: none; 
-            color: inherit; 
-        }
-
-        header a:hover {
-            text-decoration: none;
-        }
+       
     </style>
 </head>
 <body>
     <header>
-        <h1>Education Details</h1>
+        <h1>Employee Details</h1>
     </header>
-    <main>
+    <main><br>
         <div class="table-container">
             <table class="table table-bordered table-hover">
                 <thead>
@@ -130,30 +130,28 @@
                         <th class="text-center">Institution</th>
                         <th class="text-center">Year of passing </th>
                         <th class="text-center">grade</th>
-                        <th class="text-center">Certificate</th>
-                        <th class="text-center">Edit</th>
-                        <th class="text-center">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for user in users %}
+                    {% for user in users|slice:":10" %}
                     <tr>
                         <td>{{ user.degree_level}}</td>
                         <td>{{ user.degree_name}}</td>
                         <td>{{ user.institution}}</td>
                         <td>{{ user.year_of_passing}}</td>
                         <td>{{ user.grade_or_percentage}}</td>
-                        <td><img src="{{ user.file.url }}" alt="" height="100px" width="200px"></td>
-                        <td><a href="{% url 'edu_edit' user.id %}" class="btn btn-success btn-sm">Edit</a></td>
-                        <td><a href="{% url 'edu_del' user.id %}" class="btn btn-danger btn-sm">Delete</a></td> 
-                         
+                        
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            <div class="text-center mt-3">
+                <strong>Total Rows: {{ total_rows }}</strong>
+            </div>
         </div>
     </main>
-
+    
 </body>
 </html>
+<br><br>
 {% endblock %}

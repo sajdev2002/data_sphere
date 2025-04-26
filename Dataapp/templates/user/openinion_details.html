@@ -1,35 +1,37 @@
+{% extends "user/user_header.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Submit Your Product Opinion</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f3f3f3;
-            margin: 0;
-            padding: 30px;
-        }
-        .form-container {
+        /* Scoped styles for the opinion details page */
+        .opinion-form-container {
             max-width: 600px;
             background: white;
             padding: 25px 30px;
             border-radius: 8px;
-            margin: auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 50px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
         }
-        .form-container h2 {
+
+        .opinion-form-container h2 {
             text-align: center;
             margin-bottom: 20px;
             color: #333;
         }
-        label {
+
+        .opinion-form-container label {
             display: block;
             margin-top: 15px;
             font-weight: bold;
         }
-        input[type="text"],
-        select,
-        textarea {
+
+        .opinion-form-container input[type="text"],
+        .opinion-form-container select,
+        .opinion-form-container textarea {
             width: 100%;
             padding: 8px;
             margin-top: 5px;
@@ -37,10 +39,12 @@
             border: 1px solid #ccc;
             font-size: 14px;
         }
-        textarea {
+
+        .opinion-form-container textarea {
             resize: vertical;
         }
-        .submit-btn {
+
+        .opinion-form-container .submit-btn {
             margin-top: 20px;
             width: 100%;
             padding: 10px;
@@ -51,40 +55,65 @@
             font-weight: bold;
             cursor: pointer;
             border-radius: 4px;
+            transition: background-color 0.3s ease;
         }
-        .submit-btn:hover {
+
+        .opinion-form-container .submit-btn:hover {
             background: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .opinion-form-container {
+                padding: 20px;
+            }
+
+            .opinion-form-container h2 {
+                font-size: 18px;
+            }
+
+            .opinion-form-container label {
+                font-size: 14px;
+            }
+
+            .opinion-form-container input[type="text"],
+            .opinion-form-container select,
+            .opinion-form-container textarea {
+                font-size: 13px;
+            }
+
+            .opinion-form-container .submit-btn {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="opinion-form-container">
+        <h2>Product Opinion Form</h2>
+        <form method="POST">
+            {% csrf_token %}
 
-<div class="form-container">
-    <h2>Product Opinion Form</h2>
-    <form method="POST">
-        {% csrf_token %}
+            <label for="id_product_type">Product Type <span style="color:red;">*</span></label>
+            {{ form.product_type }}
 
-        <label for="id_product_type">Product Type <span style="color:red;">*</span></label>
-        {{ form.product_type }}
+            <label for="id_product_name">Product Name <span style="color:red;">*</span></label>
+            {{ form.product_name }}
 
-        <label for="id_product_name">Product Name <span style="color:red;">*</span></label>
-        {{ form.product_name }}
+            <label for="id_about_product">About the Product <span style="color:red;">*</span></label>
+            {{ form.about_product }}
 
-        <label for="id_about_product">About the Product <span style="color:red;">*</span></label>
-        {{ form.about_product }}
+            <label for="id_suggesions">Suggestions <span style="color:red;">*</span></label>
+            {{ form.suggesions }}
 
-        <label for="id_suggesions">Suggestions <span style="color:red;">*</span></label>
-        {{ form.suggesions }}
+            <label for="id_liked_features">Liked Features</label>
+            {{ form.liked_features }}
 
-        <label for="id_liked_features">Liked Features</label>
-        {{ form.liked_features }}
+            <label for="id_disliked_features">Disliked Features</label>
+            {{ form.disliked_features }}
 
-        <label for="id_disliked_features">Disliked Features</label>
-        {{ form.disliked_features }}
-
-        <button type="submit" class="submit-btn">Submit Opinion</button>
-    </form>
-</div>
-
+            <button type="submit" class="submit-btn">Submit Opinion</button>
+        </form>
+    </div>
 </body>
 </html>
+{% endblock %}

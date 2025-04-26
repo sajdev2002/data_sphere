@@ -187,7 +187,23 @@ class chatmodel(models.Model):
     receiver = models.IntegerField()
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+#image extract
+class Transaction(models.Model):
+    file = models.FileField(upload_to='ai_extract/')
+    transaction_id = models.CharField(max_length=100, null=True, blank=True)
+    dateee = models.DateField(default=now)
+    transaction_type = models.CharField(max_length=100, default="0")
+    amount = models.CharField(max_length=100, default="0") 
+    payment_method = models.CharField(max_length=100, default="0")
+    merchant_name = models.CharField(max_length=100, default="0")
+    category = models.CharField(max_length=100, default="0")
+    upload_date = models.DateField(default=now)
+    status = models.IntegerField(default=0)
+    login = models.ForeignKey(User, on_delete=models.CASCADE)
     
+
+
 class BrowserHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  
     title = models.CharField(max_length=255, blank=True, null=True) 

@@ -1,6 +1,10 @@
+{% extends "bussiness/header.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Survey Results</title>
     <style>
         body {
@@ -38,6 +42,7 @@
     </style>
 </head>
 <body>
+    <br><br>
     <h2>{{ survey.question }}</h2>
 
     <div class="chart-buttons">
@@ -50,3 +55,5 @@
     <img src="{{ chart_url }}" alt="Survey Chart">
 </body>
 </html>
+<br><br><br><br><br><br>
+{% endblock %}

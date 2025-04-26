@@ -1,18 +1,25 @@
+{% extends "user/user_header.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Thank You</title>
     <style>
-        body {
+        /* Scoped styles for the thank you page */
+        .thank-you-container {
             font-family: Arial, sans-serif;
             background-color: #f0f8ff;
             text-align: center;
             padding: 50px;
         }
-        h2 {
+
+        .thank-you-container h2 {
             color: #4CAF50;
+            margin-bottom: 20px;
         }
-        .button {
+
+        .thank-you-container .button {
             display: inline-block;
             margin-top: 20px;
             padding: 10px 20px;
@@ -23,14 +30,19 @@
             border-radius: 5px;
             text-decoration: none;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-        .button:hover {
+
+        .thank-you-container .button:hover {
             background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <h2>Thank you for your feedback!</h2>
-    <a href="../review_product/" class="button">Go to Home</a>
+    <div class="thank-you-container">
+        <h2>Thank you for your feedback!</h2>
+        <a href="../review_product/" class="button">Go to Home</a>
+    </div>
 </body>
 </html>
+{% endblock %}

@@ -1,3 +1,7 @@
+
+{% extends "bussiness/header.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,7 +39,7 @@
     }
 
     .card-header {
-        border-radius: 15px 15px 0 0;
+        border-radius: 35px 15px 0 0;
     }
 
     .card-footer {
@@ -43,8 +47,14 @@
     }
 
     .msg_card_body {
-        overflow-y: auto;
-    }
+    overflow-y: scroll; /* Keeps the content scrollable */
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.msg_card_body::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+}
 
     .type_msg {
         background: rgba(255,255,255,0.9);
@@ -137,7 +147,7 @@
   <div class="container-fluid h-100">
     <div class="row justify-content-center h-100">
       <div class="col-md-8 col-xl-6 chat">
-        <div class="card">
+        <div class="card" style="height: 600px;">
           <div class="card-header msg_head">
             <div class="d-flex bd-highlight">
               <div class="img_cont">
@@ -193,38 +203,46 @@
   </div>
 
   <script>
-    $(document).ready(function() {
-      // Scroll to bottom on page load
-      $('.msg_card_body').scrollTop($('.msg_card_body')[0].scrollHeight);
+    
+  $(document).ready(function() {
+    // Scroll to bottom on page load
+    $('.msg_card_body').scrollTop($('.msg_card_body')[0].scrollHeight);
 
-      $('#send_btn').on('click', function() {
-        let message = $('#message_input').val().trim();
-        if (!message) return;
+    $('#send_btn').on('click', function() {
+      let message = $('#message_input').val().trim();
+      if (!message) return;
 
-        $.ajax({
-          url: "{% url 'send_message' %}",
-          method: 'POST',
-          data: {
-            'message': message,
-            'csrfmiddlewaretoken': '{{ csrf_token }}'
-          },
-          success: function(response) {
-            if (response.message) {
-              const newMsg = `
-                <div class="d-flex justify-content-end mb-4">
-                  <div class="msg_cotainer_send">
-                    <div class="message_text">${response.message}</div>
-                    <div class="msg_time_send">${response.timestamp}</div>
-                  </div>
-                </div>`;
-              $('.msg_card_body').append(newMsg);
-              $('#message_input').val('');
-              $('.msg_card_body').animate({ scrollTop: $('.msg_card_body')[0].scrollHeight }, 500);
-            }
+      $.ajax({
+        url: "{% url 'send_message' %}",
+        method: 'POST',
+        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+data: JSON.stringify({
+  message: message,
+  sender: '{{ sender_id }}',
+  receiver: '{{ receiver_id }}'
+}),
+contentType: 'application/json',
+
+        success: function(response) {
+          if (response.message) {
+            const newMsg = `
+              <div class="d-flex justify-content-end mb-4">
+                <div class="msg_cotainer_send">
+                  <div class="message_text">${response.message}</div>
+                  <div class="msg_time_send">${response.timestamp}</div>
+                </div>
+              </div>`;
+            $('.msg_card_body').append(newMsg);
+            $('#message_input').val('');
+            $('.msg_card_body').animate({ scrollTop: $('.msg_card_body')[0].scrollHeight }, 500);
           }
-        });
+        }
       });
     });
+  });
+
+
   </script>
 </body>
 </html>
+{% endblock %}

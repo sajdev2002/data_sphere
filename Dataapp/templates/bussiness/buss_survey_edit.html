@@ -1,114 +1,42 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Registration</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        textarea {
-            margin-bottom: 15px;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            width: 100%;
-            box-sizing: border-box;
-            resize: vertical;
-            min-height: 100px;
-        }
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 350px;
-            animation: fadeIn 1s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        input, select, button {
-            margin-bottom: 15px;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        input:focus, select:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-            outline: none;
-        }
-        button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .password-container {
-            position: relative;
-        }
-        .password-container input {
-            padding-right: 40px;
-        }
-        .password-container .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #007bff;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Survey Questions</h1>
+{% extends "bussiness/header.html" %}
+{% load static %}
+{% block content %}
+<style>
+.container.mt-5 {
+    max-width: 500px;
+}
+</style>
+<br><br>
+<h1 class="text-center mb-4">Survey Questions</h1>
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        
+        </style>
+        
         <form method="post">
             {% csrf_token %}
-            <form method="post">
-                {% csrf_token %}
-                <label for="id_question">Question:</label>
+            <div class="mb-3">
+                <label for="id_question" class="form-label">Question:</label>
                 {{ form.question }}
-                <label for="id_option1">Option 1:</label>
+            </div>
+            <div class="mb-3">
+                <label for="id_option1" class="form-label">Option 1:</label>
                 {{ form.option1 }}
-                <label for="id_option2">Option 2:</label>
+            </div>
+            <div class="mb-3">
+                <label for="id_option2" class="form-label">Option 2:</label>
                 {{ form.option2 }}
-                <label for="id_option3">Option 3:</label>
+            </div>
+            <div class="mb-3">
+                <label for="id_option3" class="form-label">Option 3:</label>
                 {{ form.option3 }}
-                <label for="id_option4">Option 4:</label>
+            </div>
+            <div class="mb-3">
+                <label for="id_option4" class="form-label">Option 4:</label>
                 {{ form.option4 }}
-                <button type="submit">Save Changes</button>
-            </form>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Save Changes</button>
         </form>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

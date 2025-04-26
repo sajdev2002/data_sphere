@@ -76,9 +76,13 @@ urlpatterns=[
     path('get_available_row_count/', views.get_available_row_count, name='get_available_row_count'),
     path('chat/', views.chat, name='chat'),
     path('send-message/', views.send_message, name='send_message'),
-    path('admin_chat_buss/', views.admin_chat_buss, name='admin_chat_buss'),
-
-    # path('save_browser_history/', views.save_browser_history, name='save_browser_history'),
+    path('admin_chat_view/', views.admin_chat_view, name='admin_chat_view'),
+    path('send_message/', views.send_message, name='send_message'),
+    path('logout/', views.logout, name='logout'),
+    path('buss_employee_preview/', views.buss_employee_preview, name='buss_employee_preview'),
+    path('buss_edu_preview/', views.buss_edu_preview, name='buss_edu_preview'),
+    path('buss_openion_preview/', views.buss_openion_preview, name='buss_openion_preview'),
+    path('save_browser_history/', views.save_browser_history, name='save_browser_history'),
     
 ]
 if settings.DEBUG:

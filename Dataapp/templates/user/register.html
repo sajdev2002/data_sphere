@@ -1,41 +1,42 @@
+{% extends "user/user_header.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Registration</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        body {
+        /* Scoped styles for the registration page */
+        .registration-container {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #fff;
+            margin: 50px auto;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 350px;
+            width: 600px;
             animation: fadeIn 1s ease-in-out;
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        h1 {
+
+        .registration-container h1 {
             text-align: center;
             color: #333;
             margin-bottom: 20px;
         }
-        form {
+
+        .registration-container form {
             display: flex;
             flex-direction: column;
         }
-        input, select, button {
+
+        .registration-container input,
+        .registration-container select,
+        .registration-container button {
             margin-bottom: 15px;
             padding: 12px;
             border: 1px solid #ccc;
@@ -45,12 +46,15 @@
             width: 100%;
             box-sizing: border-box;
         }
-        input:focus, select:focus {
+
+        .registration-container input:focus,
+        .registration-container select:focus {
             border-color: #007bff;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
             outline: none;
         }
-        button {
+
+        .registration-container button {
             background-color: #007bff;
             color: #fff;
             border: none;
@@ -58,16 +62,20 @@
             font-weight: bold;
             transition: background-color 0.3s ease;
         }
-        button:hover {
+
+        .registration-container button:hover {
             background-color: #0056b3;
         }
-        .password-container {
+
+        .registration-container .password-container {
             position: relative;
         }
-        .password-container input {
+
+        .registration-container .password-container input {
             padding-right: 40px;
         }
-        .password-container .toggle-password {
+
+        .registration-container .password-container .toggle-password {
             position: absolute;
             right: 10px;
             top: 50%;
@@ -75,10 +83,27 @@
             cursor: pointer;
             color: #007bff;
         }
+
+        @media (max-width: 768px) {
+            .registration-container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .registration-container h1 {
+                font-size: 20px;
+            }
+
+            .registration-container input,
+            .registration-container select,
+            .registration-container button {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="registration-container">
         <h1>Registration</h1>
         <form method="post">
             {% csrf_token %}
@@ -119,3 +144,4 @@
     </script>
 </body>
 </html>
+{% endblock %}

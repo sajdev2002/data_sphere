@@ -1,3 +1,6 @@
+{% extends "bussiness/header.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,17 +8,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Table with 5 Columns</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #444;
+        }
         table {
-            width: 100%;
+            width: 90%;
+            margin: 20px auto;
             border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px 16px;
             text-align: left;
         }
         th {
+            background-color: #509ef2;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
             background-color: #f4f4f4;
+        }
+        tr:hover {
+            background-color: #eaf4ff;
+        }
+        a button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        a button:hover {
+            opacity: 0.9;
+        }
+        .edit-btn {
+            background-color: #509ef2;
+            color: white;
+        }
+        .delete-btn {
+            background-color: #f44b5c;
+            color: white;
         }
     </style>
 </head>
@@ -29,22 +75,33 @@
                 <th>Option 2</th>
                 <th>Option 3</th>
                 <th>Option 4</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             {% for user in users %}
             <tr>
-                <td>{{ user.question}}</td>
-                <td>{{ user.option1}}</td>
-                <td>{{ user.option2}}</td>
-                <td>{{ user.option3}}</td>
-                <td>{{ user.option4}}</td>
-                <td><a href="{% url 'survey_edit' user.id %}">edit</a></td>
-                <td><a href="{% url 'survey_delete' user.id %}">delete</a></td>
+                <td>{{ user.question }}</td>
+                <td>{{ user.option1 }}</td>
+                <td>{{ user.option2 }}</td>
+                <td>{{ user.option3 }}</td>
+                <td>{{ user.option4 }}</td>
+                <td>
+                    <a href="{% url 'survey_edit' user.id %}">
+                        <button class="edit-btn"> Edit</button>
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'survey_delete' user.id %}" onclick="return confirm('Are you sure you want to delete this survey?');">
+                        <button class="delete-btn">Delete</button>
+                    </a>
+                </td>
             </tr>
-{% endfor %}
-           
+            {% endfor %}
         </tbody>
     </table>
 </body>
-</html>
+</html></a>
+<br><br>
+{% endblock %}

@@ -1,219 +1,207 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Fancy Payment Settings</title>
-    
-    <!-- Bootstrap & Icons -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- jQuery and Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+{% extends "bussiness/header.html" %}
+{% load static %}
+{% block content %}
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #74b2eb, #acb6e5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            font-family: 'Segoe UI', sans-serif;
-        }
+<!-- Scoped Styles for Fancy Payment -->
+<style>
+.fancy-payment-wrapper {
+    background: linear-gradient(135deg, #74b2eb, #acb6e5);
+    padding: 40px 0;
+    font-family: 'Segoe UI', sans-serif;
+}
 
-        .card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 3rem;
-            width: 100%;
-            max-width: 650px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            color: #333;
-        }
+.fancy-payment-wrapper .card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 3rem;
+    width: 100%;
+    max-width: 650px;
+    margin: auto;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    color: #333;
+}
 
-        .card-title {
-            font-weight: 700;
-            font-size: 2.4rem;
-            text-align: center;
-            margin-bottom: 30px;
-        }
+.fancy-payment-wrapper .card-title {
+    font-weight: 700;
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 30px;
+}
 
-        .nav ul {
-            display: flex;
-            justify-content: center;
-            padding: 0;
-            list-style: none;
-            margin-bottom: 2rem;
-        }
+.fancy-payment-wrapper .nav ul {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    list-style: none;
+    margin-bottom: 2rem;
+}
 
-        .nav li a {
-            font-weight: 600;
-            text-decoration: none;
-            color: #000;
-            padding: 10px 20px;
-            border-radius: 30px;
-            transition: 0.3s;
-        }
+.fancy-payment-wrapper .nav li a {
+    font-weight: 600;
+    text-decoration: none;
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 30px;
+    transition: 0.3s;
+}
 
-        .nav li a:hover,
-        .nav .active a {
-            background-color: #fff;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-        }
+.fancy-payment-wrapper .nav li a:hover,
+.fancy-payment-wrapper .nav .active a {
+    background-color: #fff;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
 
-        .card-section-title {
-            font-size: 1rem;
-            font-weight: bold;
-            margin: 20px 0 10px;
-        }
+.fancy-payment-wrapper .card-section-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 20px 0 10px;
+}
 
-        .saved-card {
-            background: #ffffffbb;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
+.fancy-payment-wrapper .saved-card {
+    background: #ffffffbb;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
 
-        .saved-card img {
-            height: 30px;
-            margin-right: 15px;
-        }
+.fancy-payment-wrapper .saved-card img {
+    height: 30px;
+    margin-right: 15px;
+}
 
-        .saved-card input {
-            border: none;
-            background: transparent;
-            font-weight: bold;
-            font-size: 1rem;
-        }
+.fancy-payment-wrapper .saved-card input {
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    font-size: 1rem;
+}
 
-        .saved-card a {
-            font-size: 0.9rem;
-            color: #d6615d;
-            font-weight: bold;
-        }
+.fancy-payment-wrapper .saved-card a {
+    font-size: 0.9rem;
+    color: #d6615d;
+    font-weight: bold;
+}
 
-        .form-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-            display: block;
-        }
+.fancy-payment-wrapper .form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
 
-        .form-control {
-            border-radius: 12px;
-            padding: 10px 15px;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            transition: border-color 0.3s;
-        }
+.fancy-payment-wrapper .form-control {
+    border-radius: 12px;
+    padding: 10px 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s;
+}
 
-        .form-control:focus {
-            border-color: #5cb85c;
-            box-shadow: none;
-        }
+.fancy-payment-wrapper .form-control:focus {
+    border-color: #5cb85c;
+    box-shadow: none;
+}
 
-        .input-group-text {
-            background: transparent;
-            border: none;
-            font-size: 1rem;
-        }
+.fancy-payment-wrapper .input-group-text {
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+}
 
-        .btn-submit {
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 25px;
-            font-weight: bold;
-            width: 100%;
-            margin-top: 25px;
-            transition: 0.3s ease-in-out;
-        }
+.fancy-payment-wrapper .btn-submit {
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 25px;
+    transition: 0.3s ease-in-out;
+}
 
-        .btn-submit:hover {
-            opacity: 0.9;
-        }
-    </style>
-</head>
-<body>
+.fancy-payment-wrapper .btn-submit:hover {
+    opacity: 0.9;
+}
+</style>
 
-<div class="card">
-    <div class="card-title">Settings</div>
+<div class="fancy-payment-wrapper">
+    <div class="card">
+        <div class="card-title">Payment</div>
 
-    <div class="nav">
-        <ul>
-            <li class="active"><a href="#">Payment</a></li>
-        </ul>
+        <!-- <div class="nav">
+            <ul>
+                <li class="active"><a href="#"></a></li>
+            </ul>
+        </div> -->
+
+        <form method="post">
+            {% csrf_token %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card-section-title">Saved Cards:</div>
+
+            <div class="saved-card">
+                <div class="d-flex align-items-center">
+                    <img src="https://img.icons8.com/color/48/000000/mastercard-logo.png"/>
+                    <input type="text" readonly value="**** **** **** 3193">
+                </div>
+                <a href="#"><i class="fas fa-trash"></i> Remove</a>
+            </div>
+
+            <div class="saved-card">
+                <div class="d-flex align-items-center">
+                    <img src="https://img.icons8.com/color/48/000000/visa.png"/>
+                    <input type="text" readonly value="**** **** **** 4296">
+                </div>
+                <a href="#"><i class="fas fa-trash"></i> Remove</a>
+            </div>
+
+            <div class="card-section-title">Add New Card:</div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-user"></i> Card Holder Name</label>
+                <input type="text" class="form-control" name="name_card" placeholder="e.g., Bojan Viner">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-credit-card"></i> Card Number</label>
+                <input type="text" class="form-control" name="card_no" maxlength="16" placeholder="e.g., 5134 5264 1234 4567">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-credit-card"></i> Amount</label>
+                <input type="text" class="form-control" name="amount" value="{{amount}}" readonly>
+            </div>
+
+            <div class="form-group d-flex justify-content-between align-items-center">
+                <div class="form-group mr-2">
+                    <label class="form-label"><i class="far fa-calendar-alt"></i> Expiry Date</label>
+                    <input type="text" class="form-control" name="expiry_date" placeholder="MM/YY">
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-lock"></i> CVV</label>
+                    <input type="password" class="form-control" name="cvv" placeholder="•••">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Pay</button>
+        </form>
     </div>
-
-    <form method="post">
-        {% csrf_token %}
-        {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        {% endfor %}
-    {% endif %}
-        <div class="card-section-title">Saved Cards:</div>
-
-        <div class="saved-card">
-            <div class="d-flex align-items-center">
-                <img src="https://img.icons8.com/color/48/000000/mastercard-logo.png"/>
-                <input type="text" readonly value="**** **** **** 3193">
-            </div>
-            <a href="#"><i class="fas fa-trash"></i> Remove</a>
-        </div>
-
-        <div class="saved-card">
-            <div class="d-flex align-items-center">
-                <img src="https://img.icons8.com/color/48/000000/visa.png"/>
-                <input type="text" readonly value="**** **** **** 4296">
-            </div>
-            <a href="#"><i class="fas fa-trash"></i> Remove</a>
-        </div>
-
-        <div class="card-section-title">Add New Card:</div>
-
-        <div class="form-group">
-            <label class="form-label"><i class="fas fa-user"></i> Card Holder Name</label>
-            <input type="text" class="form-control" name="name_card" placeholder="e.g., Bojan Viner">
-        </div>
-
-        <div class="form-group">
-            <label class="form-label"><i class="fas fa-credit-card"></i> Card Number</label>
-            <input type="text" class="form-control" name="card_no" maxlength="16" placeholder="e.g., 5134 5264 1234 4567">
-        </div>
-
-        <div class="form-group">
-            <label class="form-label"><i class="fas fa-credit-card"></i> Amount</label>
-            <input type="text" class="form-control" name="amount" value="{{amount}}" readonly>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label class="form-label"><i class="far fa-calendar-alt"></i> Expiry Date</label>
-                <input type="text" class="form-control" name="expiry_date" placeholder="MM/YY">
-            </div>
-            <div class="form-group col-md-6">
-                <label class="form-label"><i class="fas fa-lock"></i> CVV</label>
-                <input type="password" class="form-control" name="cvv" placeholder="•••">
-            </div>
-        </div>
-        
-        <button type="submit" class="btn-submit">Pay</button>
-        
-    </form>
 </div>
 
-</body>
-</html>
+{% endblock %}

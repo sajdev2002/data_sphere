@@ -1,115 +1,145 @@
+{% extends "user/user_header.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registration</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Product Review</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #fff;
-            padding: 30px;
+        /* Scoped styles for the review form */
+        .review-form {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 350px;
-            animation: fadeIn 1s ease-in-out;
+            background: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        h1 {
+
+        .review-form h2 {
             text-align: center;
-            color: #333;
             margin-bottom: 20px;
+            color: #333;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        input, select, button {
-            margin-bottom: 15px;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        input:focus, select:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-            outline: none;
-        }
-        button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
+
+        .review-form label {
+            display: block;
+            margin-top: 10px;
             font-weight: bold;
+            color: #555;
+        }
+
+        .review-form input[type="text"],
+        .review-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .review-form textarea {
+            resize: vertical;
+        }
+
+        .star-rating {
+            direction: rtl;
+            display: inline-flex;
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: gold;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: #28a745;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
             transition: background-color 0.3s ease;
         }
-        button:hover {
-            background-color: #0056b3;
+
+        .submit-btn:hover {
+            background: #218838;
         }
-        .password-container {
-            position: relative;
-        }
-        .password-container input {
-            padding-right: 40px;
-        }
-        .password-container .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #007bff;
+
+        @media (max-width: 768px) {
+            .review-form {
+                padding: 15px;
+                width: 90%;
+            }
+
+            .review-form h2 {
+                font-size: 18px;
+            }
+
+            .review-form label {
+                font-size: 14px;
+            }
+
+            .review-form input[type="text"],
+            .review-form textarea {
+                font-size: 13px;
+            }
+
+            .submit-btn {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Registration</h1>
-        <form method="post">
+    <div class="review-form">
+        <h2>Submit Product Review</h2>
+        <form method="POST">
             {% csrf_token %}
-            <input type="text" name="bussines_name" placeholder="Business Name" required>
-            <input type="text" name="bussines_category" placeholder="Business Category" required>
-            <input type="text" name="address" placeholder="Address" required>
-            <input type="text" name="district" placeholder="District" required>
-            <input type="text" name="city" placeholder="City" required>
-            <input type="text" name="contact_no" placeholder="Contact No" maxlength="10" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <div class="password-container">
-                <input type="password" id="password" name="password" placeholder="Password" required>
-                <span class="fa fa-eye toggle-password" onclick="togglePassword()"></span>
+            <label for="id_product_name">Product Name <span style="color: red;">*</span></label>
+            {{ form.product_name }}
+
+            <label for="id_model_number">Model Number:</label>
+            {{ form.model_number }}
+
+            <label for="id_rating">Rating <span style="color: red;">*</span></label>
+            <div class="star-rating">
+                {% for value, label in form.fields.rating.choices %}
+                    <input type="radio" id="star{{ value }}" name="rating" value="{{ value }}">
+                    <label for="star{{ value }}">&#9733;</label>
+                {% endfor %}
             </div>
-            <button type="submit">Submit</button>
+
+            <label for="id_positive_feedback">Positive Feedback <span style="color: red;">*</span></label>
+            {{ form.positive_feedback }}
+
+            <label for="id_negative_feedback">Negative Feedback:</label>
+            {{ form.negative_feedback }}
+
+            <label for="id_suggestions">Suggestions:</label>
+            {{ form.suggestions }}
+
+            <button class="submit-btn" type="submit">Submit</button>
         </form>
     </div>
-    <script>
-        function togglePassword() {
-            var passwordField = document.getElementById("password");
-            var toggleIcon = document.querySelector(".toggle-password");
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                toggleIcon.classList.remove("fa-eye");
-                toggleIcon.classList.add("fa-eye-slash");
-            } else {
-                passwordField.type = "password";
-                toggleIcon.classList.remove("fa-eye-slash");
-                toggleIcon.classList.add("fa-eye");
-            }
-        }
-    </script>
 </body>
 </html>
+{% endblock %}

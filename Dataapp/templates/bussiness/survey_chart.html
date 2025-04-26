@@ -1,3 +1,6 @@
+{% extends "bussiness/header.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,17 +8,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Table with 5 Columns</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #444;
+        }
         table {
-            width: 100%;
+            width: 90%;
+            margin: 20px auto;
             border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px 16px;
             text-align: left;
         }
         th {
+            background-color: #445b74;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
             background-color: #f4f4f4;
+        }
+        tr:hover {
+            background-color: #eaf4ff;
+        }
+        a button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        a button:hover {
+            opacity: 0.9;
+        }
+        .edit-btn {
+            background-color: #042e5b;
+            color: white;
+        }
+        .delete-btn {
+            background-color: #f44b5c;
+            color: white;
         }
     </style>
 </head>
@@ -25,25 +71,19 @@
         <thead>
             <tr>
                 <th>Question</th>
-                <th>Option 1</th>
-                <th>Option 2</th>
-                <th>Option 3</th>
-                <th>Option 4</th>
+                <th>Chart</th>
             </tr>
         </thead>
         <tbody>
             {% for user in users %}
             <tr>
-                <td>{{ user.question}}</td>
-                <td>{{ user.option1}}</td>
-                <td>{{ user.option2}}</td>
-                <td>{{ user.option3}}</td>
-                <td>{{ user.option4}}</td>
+                <td>{{ user.question }}</td>
                 <td><a href="{% url 'survey_results' user.id %}">View Chart</a></td>
             </tr>
-{% endfor %}
-           
+            {% endfor %}
         </tbody>
     </table>
 </body>
 </html>
+<br><br><br>
+{% endblock %}

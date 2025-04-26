@@ -14,10 +14,57 @@ trans_categ = [
     ('entertainment', 'Entertainment'),
     ]
 class UserForm(forms.ModelForm):
-    gender = forms.ChoiceField(choices=GENDER_CHOICES)
+    gender = forms.ChoiceField(
+        choices=GENDER_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        })
+    )
+    dob = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control',
+            'placeholder': 'Select your date of birth',
+        })
+    )
+    contact_no = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your contact number',
+        })
+    )
+    city = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your city',
+        })
+    )
+    state = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your state',
+        })
+    )
+    country = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your country',
+        })
+    )
+
     class Meta:
-        model=User
-        fields= ['name', 'gender', 'dob', 'contact_no', 'city', 'state', 'country']
+        model = User
+        fields = ['name', 'gender', 'dob', 'contact_no', 'city', 'state', 'country']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your full name',
+            }),
+        }
+        labels = {
+            'dob': 'Date of Birth',
+            'contact_no': 'Contact Number',
+        }
 
 class LoginForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -27,22 +74,108 @@ class LoginForm(forms.ModelForm):
 
 class BussinesForm(forms.ModelForm):
     class Meta:
-        model=Bussines
-        fields=['bussines_name','bussines_category','address','district','city','contact_no']
+        model = Bussines
+        fields = ['bussines_name', 'bussines_category', 'address', 'district', 'city', 'contact_no']
+        widgets = {
+            'bussines_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your business name',
+                'style': 'font-size: 16px;',
+            }),
+            'bussines_category': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your business category',
+                'style': 'font-size: 16px;',
+            }),
+            'address': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Enter your business address',
+                'style': 'resize: none; font-size: 14px;',
+            }),
+            'district': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your district',
+                'style': 'font-size: 14px;',
+            }),
+            'city': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your city',
+                'style': 'font-size: 14px;',
+            }),
+            'contact_no': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your contact number',
+                'style': 'font-size: 14px;',
+            }),
+        }
+        labels = {
+            'bussines_name': 'Business Name',
+            'bussines_category': 'Business Category',
+            'address': 'Business Address',
+            'district': 'District',
+            'city': 'City',
+            'contact_no': 'Contact Number',
+        }
 
 class login_form(forms.Form):
     email=forms.EmailField(max_length=100)
     password=forms.CharField(widget=forms.PasswordInput())
 
 class EmailForm(forms.ModelForm):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your email address',
+        })
+    )
+
     class Meta:
         model = Login
         fields = ['email']
+        labels = {
+            'email': 'Email Address',
+        }
 
 class SurveyForm(forms.ModelForm):
     class Meta:
-        model=Survey
-        fields=['question','option1','option2','option3','option4']
+        model = Survey
+        fields = ['question', 'option1', 'option2', 'option3', 'option4']
+        widgets = {
+            'question': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Enter the survey question here...',
+                'style': 'resize: none; font-size: 16px;',
+            }),
+            'option1': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Option 1',
+                'style': 'font-size: 14px;',
+            }),
+            'option2': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Option 2',
+                'style': 'font-size: 14px;',
+            }),
+            'option3': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Option 3',
+                'style': 'font-size: 14px;',
+            }),
+            'option4': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Option 4',
+                'style': 'font-size: 14px;',
+            }),
+        }
+        labels = {
+            'question': 'Survey Question',
+            'option1': 'First Option',
+            'option2': 'Second Option',
+            'option3': 'Third Option',
+            'option4': 'Fourth Option',
+        }
 
 class UserSurveyForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -93,10 +226,67 @@ class ProductReviewForm(forms.ModelForm):
 class EmployeeDetailsForm(forms.ModelForm):
     class Meta:
         model = EmployeeDetails
-        fields = ['file','department', 'designation','company_name','salary','location', 'date_of_joining', 'reason_to_leave_previous_company']
+        fields = [
+            'file', 
+            'department', 
+            'designation', 
+            'company_name', 
+            'salary', 
+            'location', 
+            'date_of_joining', 
+            'reason_to_leave_previous_company'
+        ]
         widgets = {
-            'date_of_joining': forms.DateInput(attrs={'type': 'date'}),
-            'reason_to_leave_previous_company': forms.Textarea(attrs={'rows': 3}),
+            'file': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'style': 'border: 2px solid #ced4da; padding: 10px;',
+            }),
+            'department': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your department',
+                'style': 'font-size: 14px; border-radius: 5px;',
+            }),
+            'designation': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your designation',
+                'style': 'font-size: 14px; border-radius: 5px;',
+            }),
+            'company_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your company name',
+                'style': 'font-size: 14px; border-radius: 5px;',
+            }),
+            'salary': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your salary',
+                'style': 'font-size: 14px; border-radius: 5px;',
+            }),
+            'location': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your location',
+                'style': 'font-size: 14px; border-radius: 5px;',
+            }),
+            'date_of_joining': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control',
+                'style': 'font-size: 14px; border-radius: 5px;',
+            }),
+            'reason_to_leave_previous_company': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Explain your reason for leaving the previous company',
+                'style': 'resize: none; font-size: 14px; border-radius: 5px;',
+            }),
+        }
+        labels = {
+            'file': 'Upload File',
+            'department': 'Department',
+            'designation': 'Designation',
+            'company_name': 'Company Name',
+            'salary': 'Salary',
+            'location': 'Location',
+            'date_of_joining': 'Date of Joining',
+            'reason_to_leave_previous_company': 'Reason for Leaving Previous Company',
         }
 
 class EducationDetailForm(forms.ModelForm):
@@ -164,7 +354,13 @@ class buss_data_request_form(forms.ModelForm):
 
 
 class ProductOpinionForm(forms.ModelForm):
-    product_type = forms.ChoiceField(choices=trans_categ, widget=forms.Select())
+    product_type = forms.ChoiceField(
+        choices=trans_categ,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'style': 'font-size: 14px; border-radius: 5px;',
+        })
+    )
 
     class Meta:
         model = ProductOpinion
@@ -177,10 +373,43 @@ class ProductOpinionForm(forms.ModelForm):
             'disliked_features',
         ]
         widgets = {
-            'about_product': forms.Textarea(attrs={'rows': 3}),
-            'suggesions': forms.Textarea(attrs={'rows': 3}),
-            'liked_features': forms.Textarea(attrs={'rows': 2}),
-            'disliked_features': forms.Textarea(attrs={'rows': 2}),
+            'product_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter the product name',
+                'style': 'font-size: 14px; border-radius: 5px;',
+            }),
+            'about_product': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Share your thoughts about the product',
+                'style': 'resize: none; font-size: 14px; border-radius: 5px;',
+            }),
+            'suggesions': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Provide your suggestions',
+                'style': 'resize: none; font-size: 14px; border-radius: 5px;',
+            }),
+            'liked_features': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'What features did you like?',
+                'style': 'resize: none; font-size: 14px; border-radius: 5px;',
+            }),
+            'disliked_features': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'What features did you dislike?',
+                'style': 'resize: none; font-size: 14px; border-radius: 5px;',
+            }),
+        }
+        labels = {
+            'product_type': 'Product Type',
+            'product_name': 'Product Name',
+            'about_product': 'About the Product',
+            'suggesions': 'Suggestions',
+            'liked_features': 'Liked Features',
+            'disliked_features': 'Disliked Features',
         }
 
 class chatmodelform(forms.ModelForm):
@@ -190,3 +419,13 @@ class chatmodelform(forms.ModelForm):
         widgets = {
             'message': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Type your message here...'}),
         }
+
+class UploadInvoiceForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ['file']
+
+class TransactionEditForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        exclude = ['login', 'upload_date', 'status', 'file']

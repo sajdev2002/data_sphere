@@ -1,3 +1,7 @@
+{% extends "user/user_header.html" %}
+{% load static %}
+{% block content %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,25 +106,13 @@
             background-color: #c82333;
         }
 
-        footer {
-            text-align: center;
-            padding: 15px;
-            background-color: #343a40;
-            color: white;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+        header a {
+            text-decoration: none; 
+            color: inherit; 
         }
 
-        footer a {
-            color: #007bff;
+        header a:hover {
             text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
@@ -161,8 +153,7 @@
             </table>
         </div>
     </main>
-    <footer>
-        &copy; 2023 Your Company. All Rights Reserved. <a href="#">Privacy Policy</a>
-    </footer>
+    
 </body>
 </html>
+{% endblock %}

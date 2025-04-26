@@ -1,46 +1,48 @@
-
+{% extends "bussiness/header.html" %}
 {% load static %}
+{% block content %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <title>Data Request</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            background: linear-gradient(135deg, #f2f3f3, #f2f2f6);
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
 
-        form {
+        .data-request-form {
             background: #ffffff;
             padding: 20px 30px;
             border-radius: 12px;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 500px;
+            margin: 50px auto;
         }
 
-        h1 {
+        .data-request-form h1 {
             text-align: center;
             color: #333333;
             margin-bottom: 20px;
         }
 
-        label {
+        .data-request-form label {
             font-weight: bold;
             color: #555555;
             display: block;
             margin-bottom: 8px;
         }
 
-        select, input, button {
+        .data-request-form select,
+        .data-request-form input,
+        .data-request-form button {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
@@ -49,7 +51,7 @@
             font-size: 14px;
         }
 
-        button {
+        .data-request-form button {
             background: linear-gradient(135deg, #007bff, #0056b3);
             color: #ffffff;
             border: none;
@@ -59,7 +61,7 @@
             transition: transform 0.2s, background 0.3s ease;
         }
 
-        button:hover {
+        .data-request-form button:hover {
             background: linear-gradient(135deg, #0056b3, #003f7f);
             transform: scale(1.05);
         }
@@ -91,153 +93,158 @@
             background-color: #f9f9f9;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
+        header a {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Use the inherited color */
+}
+
+header a:hover {
+    text-decoration: none; /* Prevent underline on hover */
+}
     </style>
 </head>
+
 <body>
-
-<form method="post">
-    {% csrf_token %}
-    <h1>Data Request Form</h1>
-    <div>
-        {{ form.data_category.label_tag }}
-        {{ form.data_category }}
-    </div>
-
-    
-
-    <!-- FILTER TOGGLE ICON -->
-    <div class="filter-toggle" id="filterToggle">
-        <i class="fas fa-filter"></i> Add Filters (optional)
-    </div>
-
-    <!-- HIDDEN FILTER SECTION -->
-    <div id="filterSection" class="filter-section">
+    <br><br>
+    <form method="post" class="data-request-form">
+        {% csrf_token %}
+        <h1>Data Request Form</h1>
         <div>
-            <label for="id_table_column">Table Column</label>
-            <select name="table_column" id="id_table_column" class="form-control">
-                <option value="">Select a column</option>
-            </select>
+            {{ form.data_category.label_tag }}
+            {{ form.data_category }}
         </div>
-        
-        <div id="id_table_value_container">
-    <label for="id_table_value">Table Value</label>
-    <input type="text" name="table_value" class="form-control" id="id_table_value" />
-</div>
-    </div>
-    <div>
-        {{ form.no_of_row.label_tag }}
-        {{ form.no_of_row }}
-    </div>
-    <button type="submit">Submit</button>
-</form>
 
-<script>
-    $(document).ready(function () {
-        // Toggle filter section
-        $('.filter-toggle').click(function () {
-            $('#filterSection').slideToggle();
-        });
-    
-        function loadColumns(category) {
-            $.ajax({
-                url: "{% url 'get_category_columns' %}",
-                data: { 'category': category },
-                dataType: 'json',
-                success: function (response) {
-                    let columnDropdown = $('#id_table_column');
-                    columnDropdown.empty();
-                    columnDropdown.append('<option value="">Select a column</option>');
-                    response.columns.forEach(function (column) {
-                        columnDropdown.append('<option value="' + column + '">' + column + '</option>');
-                    });
-    
-                    // Reset table_value input
-                    $('#id_table_value_container').html(`
-                        <label for="id_table_value">Table Value</label>
-                        <input type="text" name="table_value" class="form-control" id="id_table_value" />
-                    `);
-                }
+        <!-- FILTER TOGGLE ICON -->
+        <div class="filter-toggle" id="filterToggle">
+            <i class="fas fa-filter"></i> Add Filters (optional)
+        </div>
+
+        <!-- HIDDEN FILTER SECTION -->
+        <div id="filterSection" class="filter-section">
+            <div>
+                <label for="id_table_column">Table Column</label>
+                <select name="table_column" id="id_table_column" class="form-control">
+                    <option value="">Select a column</option>
+                </select>
+            </div>
+
+            <div id="id_table_value_container">
+                <label for="id_table_value">Table Value</label>
+                <input type="text" name="table_value" class="form-control" id="id_table_value" />
+            </div>
+        </div>
+        <div>
+            {{ form.no_of_row.label_tag }}
+            {{ form.no_of_row }}
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            // Toggle filter section
+            $('.filter-toggle').click(function () {
+                $('#filterSection').slideToggle();
             });
-        }
-        function loadAvailableRowCount(category) {
-            const selectedColumn = $('#id_table_column').val();
-            const selectedValue = $('#id_table_value').val();
-    
-            $.ajax({
-                url: "{% url 'get_available_row_count' %}",
-                data: {
-                    'category': category,
-                    'column': selectedColumn,
-                    'value': selectedValue
-                },
-                dataType: 'json',
-                success: function (response) {
-                    $('#id_no_of_row').val(response.count);
-                }
-            });
-        }
-    
-        function initCategory(category) {
-            loadColumns(category);
-            loadAvailableRowCount(category);
-        }
-    
-        // On page load
-        const defaultCategory = $('#id_data_category').val();
-        if (defaultCategory) {
-            initCategory(defaultCategory);
-        }
-    
-        // On category change
-        $('#id_data_category').change(function () {
-            const selectedCategory = $(this).val();
-            initCategory(selectedCategory);
-        });
-    
-        // On column change -> fetch dropdown choices if applicable
-        $('#id_table_column').change(function () {
-            const selectedColumn = $(this).val();
-            $.ajax({
-                url: "{% url 'get_column_choices' %}",
-                data: { 'column': selectedColumn },
-                dataType: 'json',
-                success: function (response) {
-                    if (response.choices.length > 0) {
-                        let selectHtml = '<label for="id_table_value">Table Value</label><select name="table_value" class="form-control" id="id_table_value">';
-                        selectHtml += '<option value="">Select value</option>';
-                        response.choices.forEach(function (choice) {
-                            selectHtml += `<option value="${choice[0]}">${choice[1]}</option>`;
+
+            function loadColumns(category) {
+                $.ajax({
+                    url: "{% url 'get_category_columns' %}",
+                    data: { 'category': category },
+                    dataType: 'json',
+                    success: function (response) {
+                        let columnDropdown = $('#id_table_column');
+                        columnDropdown.empty();
+                        columnDropdown.append('<option value="">Select a column</option>');
+                        response.columns.forEach(function (column) {
+                            columnDropdown.append('<option value="' + column + '">' + column + '</option>');
                         });
-                        selectHtml += '</select>';
-                        $('#id_table_value_container').html(selectHtml);
-                    } else {
+
+                        // Reset table_value input
                         $('#id_table_value_container').html(`
                             <label for="id_table_value">Table Value</label>
                             <input type="text" name="table_value" class="form-control" id="id_table_value" />
                         `);
                     }
-    
-                    // After dropdown loads, bind event again
-                    $('#id_table_value').off().on('change keyup', function () {
-                        const cat = $('#id_data_category').val();
-                        if (cat) loadAvailableRowCount(cat);
-                    });
-                }
+                });
+            }
+
+            function loadAvailableRowCount(category) {
+                const selectedColumn = $('#id_table_column').val();
+                const selectedValue = $('#id_table_value').val();
+
+                $.ajax({
+                    url: "{% url 'get_available_row_count' %}",
+                    data: {
+                        'category': category,
+                        'column': selectedColumn,
+                        'value': selectedValue
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#id_no_of_row').val(response.count);
+                    }
+                });
+            }
+
+            function initCategory(category) {
+                loadColumns(category);
+                loadAvailableRowCount(category);
+            }
+
+            // On page load
+            const defaultCategory = $('#id_data_category').val();
+            if (defaultCategory) {
+                initCategory(defaultCategory);
+            }
+
+            // On category change
+            $('#id_data_category').change(function () {
+                const selectedCategory = $(this).val();
+                initCategory(selectedCategory);
+            });
+
+            // On column change -> fetch dropdown choices if applicable
+            $('#id_table_column').change(function () {
+                const selectedColumn = $(this).val();
+                $.ajax({
+                    url: "{% url 'get_column_choices' %}",
+                    data: { 'column': selectedColumn },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.choices.length > 0) {
+                            let selectHtml = '<label for="id_table_value">Table Value</label><select name="table_value" class="form-control" id="id_table_value">';
+                            selectHtml += '<option value="">Select value</option>';
+                            response.choices.forEach(function (choice) {
+                                selectHtml += `<option value="${choice[0]}">${choice[1]}</option>`;
+                            });
+                            selectHtml += '</select>';
+                            $('#id_table_value_container').html(selectHtml);
+                        } else {
+                            $('#id_table_value_container').html(`
+                                <label for="id_table_value">Table Value</label>
+                                <input type="text" name="table_value" class="form-control" id="id_table_value" />
+                            `);
+                        }
+
+                        // After dropdown loads, bind event again
+                        $('#id_table_value').off().on('change keyup', function () {
+                            const cat = $('#id_data_category').val();
+                            if (cat) loadAvailableRowCount(cat);
+                        });
+                    }
+                });
+            });
+
+            // Trigger row count when user types or selects value
+            $(document).on('change keyup', '#id_table_column, #id_table_value', function () {
+                const cat = $('#id_data_category').val();
+                if (cat) loadAvailableRowCount(cat);
             });
         });
-    
-        // Trigger row count when user types or selects value
-        $(document).on('change keyup', '#id_table_column, #id_table_value', function () {
-            const cat = $('#id_data_category').val();
-            if (cat) loadAvailableRowCount(cat);
-        });
-    });
     </script>
-    
-
-
-    
-
 </body>
+
 </html>
+<br><br>
+{% endblock %}

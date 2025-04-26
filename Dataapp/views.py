@@ -20,8 +20,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import BrowserHistory
 
-from django.db.models import Sum
-from django.db.models import Q
+import json
+from django.utils import timezone
+
+
 # Create your views here.
 def home(request):
     return render(request,'admin/admin_home.html')
@@ -257,9 +259,13 @@ def survey_view_buss(request):
     grouped_responses = {}
     for response in res:
         user_name = response.user.uniq 
+        survey_question = response.survey.question
         if user_name not in grouped_responses:
             grouped_responses[user_name] = []
-        grouped_responses[user_name].append(response.option)  
+        grouped_responses[user_name].append({
+            'question': survey_question,
+            'option': response.option
+            })
 
     return render(request, 'bussiness/buss_sur_res.html', {'grouped_responses': grouped_responses})
 
@@ -818,6 +824,21 @@ def buss_review_preview(request):
     total_rows = users.count()  # Calculate the total number of rows
     return render(request, 'bussiness/buss_review_prev.html', {'users': users, 'total_rows': total_rows})
 
+def buss_employee_preview(request):
+    users = EmployeeDetails.objects.all()
+    total_rows = users.count()  # Calculate the total number of rows
+    return render(request, 'bussiness/buss_employee_preview.html', {'users': users, 'total_rows': total_rows})
+
+def buss_edu_preview(request):
+    users = EducationDetail.objects.all()
+    total_rows = users.count()  # Calculate the total number of rows
+    return render(request, 'bussiness/buss_edu_preview.html', {'users': users, 'total_rows': total_rows})
+
+def buss_openion_preview(request):
+    users = ProductOpinion.objects.all()
+    total_rows = users.count()  # Calculate the total number of rows
+    return render(request, 'bussiness/buss_openion_preview.html', {'users': users, 'total_rows': total_rows})
+
 
 #chart
 def survey_view_chart(request):
@@ -1048,22 +1069,30 @@ def user_wallet_view(request):
         'category_earnings': category_earnings,
     })
 
-
-#chat
-
 def chat(request):
     user_id = request.session.get('buss_id')
+    login_user = Login.objects.get(id=user_id)
+
     admin = Login.objects.get(user_type='admin')
 
-    # Fetch chat messages between user and admin
+    # Determine sender and receiver based on user type
+    if login_user.user_type == 'admin':
+        sender_id = admin.id
+        # You'll need to specify which business admin is chatting with
+        receiver_id = request.GET.get('buss_id')  # Pass ?buss_id=3 in URL or adjust logic
+    else:
+        sender_id = login_user.id
+        receiver_id = admin.id
+
+    # Fetch chat messages between sender and receiver
     messages = chatmodel.objects.filter(
-        sender__in=[user_id, admin.id],
-        receiver__in=[user_id, admin.id]
+        sender__in=[sender_id, receiver_id],
+        receiver__in=[sender_id, receiver_id]
     ).order_by('timestamp')
 
     chat_data = []
     for msg in messages:
-        local_timestamp = localtime(msg.timestamp)  # Convert to local time
+        local_timestamp = localtime(msg.timestamp)
         if local_timestamp.date() == date.today():
             display_time = local_timestamp.strftime("%I:%M %p, Today")
         else:
@@ -1071,60 +1100,112 @@ def chat(request):
 
         chat_data.append({
             'message': msg.message,
-            'sender': 'You' if msg.sender == user_id else 'Admin',
-            'timestamp': display_time  # Pass the formatted timestamp
+            'sender': 'You' if msg.sender == sender_id else 'Admin',
+            'timestamp': display_time
         })
 
     context = {
         'messages': chat_data,
-        'today': date.today()
+        'sender_id': sender_id,
+        'receiver_id': receiver_id
     }
 
     return render(request, 'bussiness/chat_set.html', context)
+ 
+def send_message(request):
+    if request.method == "POST":
+        try:
+            if request.headers.get('Content-Type') == 'application/json':
+                data = json.loads(request.body)
+                sender_id = data.get('sender')
+                receiver_id = data.get('receiver')
+                message_text = data.get('message')
+            else:
+                sender_id = request.POST.get('sender')
+                receiver_id = request.POST.get('receiver')
+                message_text = request.POST.get('message')
+            
+            # Save the message (your model might differ)
+            from .models import chatmodel, Login  # adjust as needed
+
+            sender = Login.objects.get(id=sender_id)
+            receiver = Login.objects.get(id=receiver_id)
+            message_obj = chatmodel.objects.create(
+                sender=sender,
+                receiver=receiver,
+                message=message_text
+            )
+
+            return JsonResponse({
+                'message': message_obj.message,
+                'timestamp': message_obj.timestamp.strftime("%b %d, %I:%M %p")
+            })
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+def admin_chat_view(request):
+    businesses = Bussines.objects.all()
+    selected_id = request.GET.get("business_id")
+    selected_business = None
+    messages = []
+
+    # Get admin login ID
+    admin_login = Login.objects.filter(user_type='admin').first()
+    admin_id = admin_login.id if admin_login else None
+
+    if selected_id:
+        selected_business = get_object_or_404(Bussines, id=selected_id)
+        business_login_id = selected_business.login.id
+
+        messages = chatmodel.objects.filter(
+            sender__in=[admin_id, business_login_id],
+            receiver__in=[admin_id, business_login_id]
+        ).order_by("timestamp")
+
+    return render(request, "admin/admin_chat.html", {
+        "businesses": businesses,
+        "selected_business": selected_business,
+        "messages": messages,
+        "admin_id": admin_id
+    })
 
 def send_message(request):
-    if request.method == 'POST':
-        user_id = request.session.get('buss_id')
-        admin = Login.objects.get(user_type='admin')
-        message = request.POST.get('message')
-
-        new_chat = chatmodel.objects.create(
-            sender=user_id,
-            receiver=admin.id,
-            message=message
+    if request.method == "POST":
+        data = json.loads(request.body)
+        sender = data.get("sender")
+        receiver = data.get("receiver")
+        message = data.get("message")
+        msg = chatmodel.objects.create(
+            sender=sender,
+            receiver=receiver,
+            message=message,
+            timestamp=timezone.now()
         )
-
-        # Get local timestamp
-        local_timestamp = localtime(new_chat.timestamp)
-        current_date = date.today()
-
-        if local_timestamp.date() == current_date:
-            display_time = local_timestamp.strftime("Today, %I:%M %p")
-        else:
-            display_time = local_timestamp.strftime("%b %d, %I:%M %p")
-
         return JsonResponse({
-            'message': new_chat.message,
-            'timestamp': display_time,
-            'sender': 'You'
+            "status": "success",
+            "message": msg.message,
+            "timestamp": msg.timestamp.strftime("%b %d, %I:%M %p")
         })
-    
-def admin_chat_buss(request):
-    return render(request, 'admin/chat_buss.html')
 
-
+def logout(request):
+    request.session.flush()
+    return redirect('login')
 
 #brower
+@csrf_exempt
 def save_browser_history(request):
+    print("Method:", request.method)
+    print("POST data:", request.POST)
     if request.method == 'POST':
-        # Parse the JSON data sent by the extension
         username = request.POST.get('username')  
         url = request.POST.get('url')
         title = request.POST.get('title')
 
-        # Get the user and save the data
-        user = User.objects.get(username=username)
-        BrowserHistory.objects.create(user=user, url=url, title=title)
-
-        return JsonResponse({'status': 'success', 'message': 'Browser history saved successfully.'})
+        try:
+            user = User.objects.get(username=username)
+            BrowserHistory.objects.create(user=user, url=url, title=title)
+            return JsonResponse({'status': 'success', 'message': 'Browser history saved successfully.'})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found.'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
